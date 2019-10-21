@@ -7,8 +7,16 @@ library(uwot)
 # options("tercen.stepId"= "3-1")
 ctx = tercenCtx()
 
+pca = NULL
+if (ctx$op.value('init') != "NULL")  pca  = as.integer(ctx$op.value('init'))
+
 t(ctx$as.matrix())  %>% 
-  uwot::umap() %>%
+  uwot::umap(init     = as.character(ctx$op.value('init')),
+             scale    = as.character(ctx$op.value('scale')),
+             spread   = as.double(ctx$op.value('spread')),
+             min_dist = as.double(ctx$op.value('min_dist')),
+             pca      = pca
+            ) %>%
   (function(umap) {
     d = as_tibble(umap)
     names(d)=paste('umap', seq_along(d), sep = '.')
