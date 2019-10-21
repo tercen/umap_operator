@@ -8,7 +8,7 @@ library(uwot)
 ctx = tercenCtx()
 
 pca = NULL
-if (ctx$op.value('init') != "NULL")  pca  = as.integer(ctx$op.value('pca'))
+if (as.character(ctx$op.value('pca')) != "NULL")  pca  = as.integer(ctx$op.value('pca'))
 
 t(ctx$as.matrix())  %>% 
   uwot::umap(init     = as.character(ctx$op.value('init')),
