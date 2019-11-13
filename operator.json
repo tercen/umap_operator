@@ -25,7 +25,7 @@
     "kind": "EnumeratedProperty",
     "name": "scale",
     "defaultValue": "none",
-    "description": "Scaling to apply to X if it is a data frame or matrix",
+    "description": "Type of scaling to apply to data",
 	  "values": [
       "none",
       "Z",
