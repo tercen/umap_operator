@@ -27,7 +27,7 @@ Output relations|.
 
 
 ##### Details
-The operator performs umap analysis. It reduces the amount of variables (i.e. indicated by rows) to a lower number (default 2). This operators wraps the `uwot::umap()`. see (https://github.com/jlmelville/uwot) for more details and examples.
+The operator performs umap analysis. It reduces the amount of variables (i.e. indicated by rows) to a lower number (default 2). This operators wraps the `uwot::umap()`. See (https://github.com/jlmelville/uwot) for more details, especially settings and examples.
 
 
 #### Reference
