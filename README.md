@@ -1,7 +1,7 @@
 # umap operator
 
 #### Description
-`umap` operator performs umap analysis.
+Uniform Manifold Approximation and Projection `umap` : Calculates nonlinear dimension reduction on a data set.
 
 ##### Usage
 Input projection|.

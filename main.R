@@ -3,9 +3,9 @@ library(dplyr)
 library(uwot)
 
 
-ctx = tercenCtx()
+ctx <- tercenCtx()
 
-pca = NULL
+pca <- NULL
 if (as.character(ctx$op.value('pca')) != "NULL")  pca  = as.integer(ctx$op.value('pca'))
 
 t(ctx$as.matrix())  %>% 
