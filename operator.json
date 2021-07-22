@@ -1,6 +1,6 @@
 {
-  "name": "umap",
-  "description": "Uniform Manifold Approximation and Projection (UMAP) method",
+  "name": "UMAP",
+  "description": "Uniform Manifold Approximation and Projection: Calculates nonlinear dimension reduction on a data set.",
   "tags": ["flowcytometry", "rnaseq"],
   "authors": ["tercen"],
   "urls": ["https://github.com/tercen/umap_operator"],
