@@ -1,5 +1,5 @@
 {
-  "name": "UMAP",
+  "name": "umap",
   "description": "Uniform Manifold Approximation and Projection: Calculates nonlinear dimension reduction on a data set.",
   "tags": ["flowcytometry", "rnaseq"],
   "authors": ["tercen"],
