@@ -4,10 +4,10 @@
   "namespace": "test",
   "inputDataUri": "example_1.fcs",
   "outputDataUri": [""],
-  "columns": ["observation"],
+  "columns": ["filename"],
   "rows": ["variable"],
   "colors": [],
   "labels": [],
-  "yAxis": "measurement",
+  "yAxis": "value",
   "xAxis": ""
 }
