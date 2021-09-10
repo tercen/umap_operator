@@ -16,7 +16,7 @@ t(ctx$as.matrix())  %>%
              pca      = pca
             ) %>%
   (function(umap) {
-    d = as_tibble(umap,.name_repair = NULL)
+    d = as_tibble(umap)
     names(d)=paste('umap', seq_along(d), sep = '.')
     return(d)
   }) %>% 
