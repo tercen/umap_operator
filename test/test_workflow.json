@@ -1,0 +1,13 @@
+{
+  "kind": "OperatorUnitTest",
+  "name": "UMAP",
+  "namespace": "test",
+  "inputDataUri": "example_1.fcs",
+  "outputDataUri": [""],
+  "columns": ["observation"],
+  "rows": ["variable"],
+  "colors": [],
+  "labels": [],
+  "yAxis": "measurement",
+  "xAxis": ""
+}
