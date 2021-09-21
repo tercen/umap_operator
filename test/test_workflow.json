@@ -1,13 +1,13 @@
 {
   "kind": "OperatorUnitTest",
   "name": "UMAP",
-  "namespace": "test",
-  "inputDataUri": "example_1.fcs",
-  "outputDataUri": [""],
-  "columns": ["filename"],
-  "rows": ["variable"],
+  "namespace": "ds1",
+  "inputDataUri": "input_umap.csv",
+  "outputDataUri": ["umap_workflow-Export.csv"],
+  "columns": ["event_id"],
+  "rows": ["channel"],
   "colors": [],
   "labels": [],
-  "yAxis": "value",
+  "yAxis": "ds0.asinh",
   "xAxis": ""
 }
