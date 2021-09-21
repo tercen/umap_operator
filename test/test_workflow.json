@@ -3,7 +3,7 @@
   "name": "UMAP",
   "namespace": "test",
   "inputDataUri": "example_1.fcs",
-  "outputDataUri": [""],
+  "outputDataUri": ["umap_workflow-Export.csv"],
   "columns": ["filename"],
   "rows": ["variable"],
   "colors": [],
