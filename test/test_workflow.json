@@ -3,7 +3,7 @@
   "name": "UMAP",
   "namespace": "ds1",
   "inputDataUri": "input_umap.csv",
-  "outputDataUri": ["umap_workflow-Export.csv"],
+  "outputDataUri": ["output_umap.csv"],
   "columns": ["event_id"],
   "rows": ["channel"],
   "colors": [],
