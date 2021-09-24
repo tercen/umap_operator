@@ -51,7 +51,7 @@
     "name": "pca",
     "defaultValue": "NULL" ,
     "description": "If set to a positive integer value, reduce data to this number of columns using PCA"
-   }
+   },
     {
     "kind": "StringProperty",
     "name": "seed",
