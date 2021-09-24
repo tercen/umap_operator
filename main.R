@@ -5,10 +5,15 @@ library(uwot)
 
 ctx <- tercenCtx()
 
-set.seed(42)
+
 
 pca <- NULL
 if (as.character(ctx$op.value('pca')) != "NULL")  pca  = as.integer(ctx$op.value('pca'))
+
+seed <- NULL
+if(!is.null(ctx$op.value('seed')) && !ctx$op.value('seed') == "NULL") seed <- as.integer(ctx$op.value('seed'))
+
+set.seed(seed)
 
 t(ctx$as.matrix())  %>% 
   uwot::umap(init     = as.character(ctx$op.value('init')),
