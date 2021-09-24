@@ -11,6 +11,8 @@ getOption("tercen.stepId")
 
 ctx <- tercenCtx()
 
+set.seed(42)
+
 pca <- NULL
 if (as.character(ctx$op.value('pca')) != "NULL")  pca  = as.integer(ctx$op.value('pca'))
 
