@@ -1,0 +1,13 @@
+{
+  "kind": "OperatorUnitTest",
+  "name": "UMAP",
+  "namespace": "ds1",
+  "inputDataUri": "input_umap.csv",
+  "outputDataUri": ["output_umap.csv"],
+  "columns": ["event_id"],
+  "rows": ["channel"],
+  "colors": [],
+  "labels": [],
+  "yAxis": "ds0.asinh",
+  "xAxis": ""
+}
