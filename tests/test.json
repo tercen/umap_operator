@@ -11,7 +11,7 @@
   ],
   "inputDataUri": "groups_series_measurement2_exp.tsv",
   "outputDataUri": ["table1.csv","table2.csv"],
-  "columns": ["rowId"],
+  "columns": ["Observation"],
   "rows": ["Group"],
   "colors": [],
   "labels": [],
