@@ -10,7 +10,7 @@
   }
   ],
   "inputDataUri": "groups_series_measurement2_exp.tsv",
-  "outputDataUri": ["table1b.csv","table2.csv"],
+  "outputDataUri": ["table1.csv","table2.csv"],
   "columns": ["Observation"],
   "rows": ["Group"],
   "colors": [],

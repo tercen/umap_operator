@@ -1,0 +1,20 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "test.umap.1",
+      "name": "test.cluster",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "test.umap.2",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": ".ci",
+      "type": "double"
+    }
+    ]
+}
