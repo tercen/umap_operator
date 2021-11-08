@@ -2,6 +2,7 @@ library(tercen)
 library(dplyr)
 library(uwot)
 
+#workspace folder
 ######
 options("tercen.workflowId"= "09d4e7ebbf6268821d73acf90c0006b5")
 options("tercen.stepId"= "ea0882b5-785f-4254-a715-8c25ce7e4647")
