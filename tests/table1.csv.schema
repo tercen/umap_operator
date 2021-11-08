@@ -2,8 +2,8 @@
   "kind": "TableSchema",
   "columns": [
     {
-      "kind": "test.umap.1",
-      "name": "test.cluster",
+      "kind": "ColumnSchema",
+      "name": "test.umap.1",
       "type": "double"
     },
     {
