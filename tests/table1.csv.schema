@@ -14,7 +14,7 @@
     {
       "kind": "ColumnSchema",
       "name": ".ci",
-      "type": "double"
+      "type": "int32"
     }
     ]
 }
