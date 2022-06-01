@@ -46,12 +46,18 @@
     "defaultValue": 0.01,
     "description": "The effective minimum distance between embedded points"
    }, 
-     {
+    {
     "kind": "StringProperty",
     "name": "pca",
     "defaultValue": "NULL" ,
     "description": "If set to a positive integer value, reduce data to this number of columns using PCA"
-   },
+    },
+    {
+    "kind": "DoubleProperty",
+    "name": "prop.train",
+    "defaultValue": 1,
+    "description": "Proportion of data used to train the model. The rest of the data will be transformed. Default is 1 (all data is used)."
+    },
     {
     "kind": "DoubleProperty",
     "name": "seed",

@@ -18,7 +18,7 @@ Input parameters|.
 `spread`         | numeric, the effective scale of embedded points. In combination with `min_dist`, this determines how clustered/clumped the embedded points are
 `min_dist`       | numeric, the effective minimum distance between embedded point 
 `pca`            | numeric, If set to a positive integer value, reduce data to this number of columns using PCA
-
+`prop.train`            | numeric, proportion of data used to train the model. The rest of the data will be transformed. Default is 1 (all data is used).
 
 
 Output relations|.
