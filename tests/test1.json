@@ -14,7 +14,7 @@
   "xAxis": "x_values",
   "propertyValues": [
     {
-      "kind": "PropertyValue",
+      "kind": "DoubleProperty",
       "name": "seed",
       "value": 42
     }
