@@ -14,9 +14,9 @@
   "xAxis": "x_values",
   "propertyValues": [
     {
-      "kind": "DoubleProperty",
+      "kind": "PropertyValue",
       "name": "seed",
-      "value": 42
+      "value": "42"
     }
   ],
   "generatedOn": "06/23/2022 11:57:21 AM 2022",
