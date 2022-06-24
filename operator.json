@@ -53,9 +53,9 @@
     "description": "The effective minimum distance between embedded points"
    }, 
     {
-    "kind": "StringProperty",
+    "kind": "DoubleProperty",
     "name": "pca",
-    "defaultValue": "NULL" ,
+    "defaultValue": -1,
     "description": "If set to a positive integer value, reduce data to this number of columns using PCA"
     },
     {
