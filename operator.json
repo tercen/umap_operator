@@ -34,6 +34,12 @@
       "colrange"
       ]
     } ,
+   {
+    "kind": "DoubleProperty",
+    "name": "n_neighbors",
+    "defaultValue": 15,
+    "description": "The size of local neighborhood (in terms of number of neighboring sample points) used for manifold approximation. Larger values result in more global views of the manifold, while smaller values result in more local data being preserved."
+   }, 
     {
     "kind": "DoubleProperty",
     "name": "spread",

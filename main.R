@@ -4,8 +4,8 @@ library(uwot)
 
 ctx <- tercenCtx()
 
-pca <- NULL
-if (as.character(ctx$op.value('pca')) != "NULL")  pca  = as.integer(ctx$op.value('pca'))
+pca <- ctx$op.value('pca', as.integer, -1)
+if(pca <= 0) pca <- NULL
 
 seed <- ctx$op.value('seed', as.integer, -1)
 if(seed > 0) set.seed(seed)
@@ -29,6 +29,7 @@ umap_train <- mat.train %>%
     scale    = ctx$op.value('scale', as.character, "none"),
     spread   = ctx$op.value('spread', as.double, 1),
     min_dist = ctx$op.value('min_dist', as.double, 0.01),
+    n_neighbors = ctx$op.value('n_neighbors', as.double, 15),
     pca      = pca,
     ret_model = TRUE
   )
