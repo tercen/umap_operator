@@ -11,7 +11,7 @@
   "colors": [],
   "labels": [],
   "yAxis": "y_values",
-  "xAxis": "x_values",
+  "xAxis": "",
   "propertyValues": [
     {
       "kind": "PropertyValue",
