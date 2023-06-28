@@ -49,7 +49,7 @@
    {
     "kind": "DoubleProperty",
     "name": "min_dist",
-    "defaultValue": 0.01,
+    "defaultValue": 0.5,
     "description": "The effective minimum distance between embedded points"
    }, 
     {

@@ -24,7 +24,12 @@
     "kind": "PropertyValue",
     "name": "n_neighbors",
     "value": "5"
-  }
+    },
+    {
+    "kind": "PropertyValue",
+    "name": "min_dist",
+    "value": "0.01"
+    }
   ],
   "relTol": 1e-05
 }
