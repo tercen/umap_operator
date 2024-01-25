@@ -1,74 +1,84 @@
 {
   "name": "UMAP",
   "description": "Uniform Manifold Approximation and Projection, a dimensionality reduction method.",
-  "tags": ["dimensionality reduction", "flow cytometry", "omics", "scRNAseq"],
-  "authors": ["tercen"],
-  "urls": ["https://github.com/tercen/umap_operator"],
+  "tags": [
+    "dimensionality reduction",
+    "machine learning",
+    "flow cytometry",
+    "omics",
+    "sc-RNA-seq"
+  ],
+  "authors": [
+    "tercen"
+  ],
+  "urls": [
+    "https://github.com/tercen/umap_operator"
+  ],
   "properties": [
-  {
-    "kind": "EnumeratedProperty",
-    "name": "init",
-    "defaultValue": "spectral",
-    "description": "Type of initialization for the coordinates",
-    "values": [
-     "spectral",
-     "normlaplacian",
-     "random",
-     "lvrandom",
-     "laplacian",
-     "pca",
-     "spca",
-     "agspectral"
-    ]
-   },
-     {
-    "kind": "EnumeratedProperty",
-    "name": "scale",
-    "defaultValue": "none",
-    "description": "Type of scaling to apply to data",
-	  "values": [
-      "none",
-      "Z",
-      "maxabs",
-      "range",
-      "colrange"
+    {
+      "kind": "EnumeratedProperty",
+      "name": "init",
+      "defaultValue": "spectral",
+      "description": "Type of initialization for the coordinates",
+      "values": [
+        "spectral",
+        "normlaplacian",
+        "random",
+        "lvrandom",
+        "laplacian",
+        "pca",
+        "spca",
+        "agspectral"
       ]
-    } ,
-   {
-    "kind": "DoubleProperty",
-    "name": "n_neighbors",
-    "defaultValue": 15,
-    "description": "The size of local neighborhood (in terms of number of neighboring sample points) used for manifold approximation. Larger values result in more global views of the manifold, while smaller values result in more local data being preserved."
-   }, 
-    {
-    "kind": "DoubleProperty",
-    "name": "spread",
-    "defaultValue": 1,
-    "description": "The effective scale of embedded points. In combination with min_dist, this determines how clustered/clumped the embedded points are"
-   }, 
-   {
-    "kind": "DoubleProperty",
-    "name": "min_dist",
-    "defaultValue": 0.5,
-    "description": "The effective minimum distance between embedded points"
-   }, 
-    {
-    "kind": "DoubleProperty",
-    "name": "pca",
-    "defaultValue": -1,
-    "description": "If set to a positive integer value, reduce data to this number of columns using PCA"
     },
     {
-    "kind": "DoubleProperty",
-    "name": "prop.train",
-    "defaultValue": 1,
-    "description": "Proportion of data used to train the model. The rest of the data will be transformed. Default is 1 (all data is used)."
+      "kind": "EnumeratedProperty",
+      "name": "scale",
+      "defaultValue": "none",
+      "description": "Type of scaling to apply to data",
+      "values": [
+        "none",
+        "Z",
+        "maxabs",
+        "range",
+        "colrange"
+      ]
     },
     {
-    "kind": "DoubleProperty",
-    "name": "seed",
-    "defaultValue": -1,
-    "description": "Seed for random number generation. if less than 0, set a Random seed"
-  }
+      "kind": "DoubleProperty",
+      "name": "n_neighbors",
+      "defaultValue": 15,
+      "description": "The size of local neighborhood (in terms of number of neighboring sample points) used for manifold approximation. Larger values result in more global views of the manifold, while smaller values result in more local data being preserved."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "spread",
+      "defaultValue": 1,
+      "description": "The effective scale of embedded points. In combination with min_dist, this determines how clustered/clumped the embedded points are"
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "min_dist",
+      "defaultValue": 0.5,
+      "description": "The effective minimum distance between embedded points"
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "pca",
+      "defaultValue": -1,
+      "description": "If set to a positive integer value, reduce data to this number of columns using PCA"
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "prop.train",
+      "defaultValue": 1,
+      "description": "Proportion of data used to train the model. The rest of the data will be transformed. Default is 1 (all data is used)."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "seed",
+      "defaultValue": -1,
+      "description": "Seed for random number generation. if less than 0, set a Random seed"
+    }
   ]
 }
