@@ -1,6 +1,6 @@
 {
   "name": "UMAP",
-  "description": "Uniform Manifold Approximation and Projection, a dimensionality reduction method.",
+  "description": "Runs a Uniform Manifold Approximation and Projection, a dimensionality reduction method.",
   "tags": [
     "dimensionality reduction",
     "machine learning",
