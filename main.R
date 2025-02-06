@@ -52,5 +52,5 @@ embeddings_full %>%
   mutate(.ci = seq_len(nrow(.)) - 1L) %>%
   ctx$addNamespace() %>%
   as_relation() %>%
-  as_join_operator(list(), list()) %>%
+  as_join_operator(ctx$rnames, ctx$rnames) %>%
   save_relation(ctx)
