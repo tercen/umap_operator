@@ -2,6 +2,7 @@ library(tercen)
 library(dplyr)
 library(uwot)
 
+
 ctx <- tercenCtx()
 
 pca <- ctx$op.value('pca', as.integer, -1)
@@ -10,7 +11,8 @@ if(pca <= 0) pca <- NULL
 seed <- ctx$op.value('seed', as.integer, -1)
 if(seed > 0) set.seed(seed)
 
-mat <- t(ctx$as.matrix()) 
+mat <- ctx$as.matrix()
+mat
 
 prop.train <- ctx$op.value('prop.train', as.double, 1)
 if(prop.train > 1 | prop.train <= 0) stop("prop.train must be between 0 and 1")
