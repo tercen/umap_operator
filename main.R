@@ -51,6 +51,6 @@ embeddings_full %>%
     names(d) = paste('umap', seq_along(d), sep = '.')
     return(d)
   }) %>% 
-  mutate(.ri = seq_len(nrow(.)) - 1L) %>%
+  mutate(.ci = seq_len(nrow(.)) - 1L) %>%
   ctx$addNamespace() %>%
   ctx$save()
