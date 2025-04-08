@@ -80,5 +80,64 @@
       "defaultValue": -1,
       "description": "Seed for random number generation. if less than 0, set a Random seed"
     }
+  ],
+  "operatorSpec": {
+    "kind": "OperatorSpec",
+    "ontologyUri": "https://tercen.com/_ontology/tercen",
+    "ontologyVersion": "0.0.1",
+    "inputSpecs": [
+      {
+          "kind": "CrosstabSpec",
+          "metaFactors": [
+              {
+                  "kind": "MetaFactor",
+                  "name": "Channel",
+                  "type": "",
+                  "description": "The channel name",
+                  "ontologyMapping": "page",
+                  "crosstabMapping": "column",
+                  "cardinality": "1",
+                  "factors": []
+              },
+              {
+                "kind": "MetaFactor",
+                "name": "Description",
+                "type": "",
+                "description": "The channel description",
+                "ontologyMapping": "page",
+                "crosstabMapping": "column",
+                "cardinality": "",
+                "factors": []
+            },
+              {
+                  "kind": "MetaFactor",
+                  "name": "event ID",
+                  "type": "",
+                  "description": "the observations",
+                  "ontologyMapping": "sample",
+                  "crosstabMapping": "row",
+                  "cardinality": "1",
+                  "factors": []
+              }
+          ],
+          "axis": [
+              {
+                  "kind": "AxisSpec",
+                  "metaFactors": [
+                      {
+                          "kind": "MetaFactor",
+                          "name": "data",
+                          "type": "numeric",
+                          "description": "the measurements",
+                          "ontologyMapping": "y-axis",
+                          "crosstabMapping": "y",
+                          "cardinality": "1",
+                          "factors": []
+                      }
+                  ]
+              }
+          ]
+      }
   ]
+  }
 }
