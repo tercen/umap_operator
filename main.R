@@ -44,7 +44,6 @@ if(prop.train == 1) {
   embeddings_full <- rbind(umap_train$embedding, umap_test)[ord, ]
 }
 
-ri <- ctx$as.data.frame()$.ri
 
 embeddings_full %>%
   (function(umap) {
@@ -52,6 +51,6 @@ embeddings_full %>%
     names(d) = paste('umap', seq_along(d), sep = '.')
     return(d)
   }) %>% 
-  mutate(.ri = ri) %>%  # use .ri from original data
+  mutate(.ri = seq_len(nrow(.)) - 1L) %>%
   ctx$addNamespace() %>%
   ctx$save()
