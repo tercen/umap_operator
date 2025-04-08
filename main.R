@@ -2,7 +2,6 @@ library(tercen)
 library(dplyr)
 library(uwot)
 
-
 ctx <- tercenCtx()
 
 pca <- ctx$op.value('pca', as.integer, -1)
@@ -45,12 +44,14 @@ if(prop.train == 1) {
   embeddings_full <- rbind(umap_train$embedding, umap_test)[ord, ]
 }
 
+ri <- ctx$as.data.frame()$.ri
+
 embeddings_full %>%
   (function(umap) {
     d = as_tibble(umap)
     names(d) = paste('umap', seq_along(d), sep = '.')
     return(d)
   }) %>% 
-  mutate(.ci = seq_len(nrow(.)) - 1L) %>%
+  mutate(.ri = ri) %>%  # use .ri from original data
   ctx$addNamespace() %>%
   ctx$save()
