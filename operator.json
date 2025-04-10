@@ -94,7 +94,7 @@
                   "name": "Channel",
                   "type": "",
                   "description": "The channel identifiers",
-                  "ontologyMapping": "varaible",
+                  "ontologyMapping": "variable",
                   "crosstabMapping": "column",
                   "cardinality": "1..n",
                   "factors": []
