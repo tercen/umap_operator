@@ -93,30 +93,20 @@
                   "kind": "MetaFactor",
                   "name": "Channel",
                   "type": "",
-                  "description": "The channel name",
-                  "ontologyMapping": "page",
+                  "description": "The channel identifiers",
+                  "ontologyMapping": "varaible",
                   "crosstabMapping": "column",
-                  "cardinality": "1",
+                  "cardinality": "1..n",
                   "factors": []
               },
               {
-                "kind": "MetaFactor",
-                "name": "Description",
-                "type": "",
-                "description": "The channel description",
-                "ontologyMapping": "page",
-                "crosstabMapping": "column",
-                "cardinality": "",
-                "factors": []
-            },
-              {
                   "kind": "MetaFactor",
-                  "name": "event ID",
+                  "name": "events",
                   "type": "",
                   "description": "the observations",
-                  "ontologyMapping": "sample",
+                  "ontologyMapping": "observation",
                   "crosstabMapping": "row",
-                  "cardinality": "1",
+                  "cardinality": "1..n",
                   "factors": []
               }
           ],
@@ -129,7 +119,7 @@
                           "name": "data",
                           "type": "numeric",
                           "description": "the measurements",
-                          "ontologyMapping": "y-axis",
+                          "ontologyMapping": "measurement",
                           "crosstabMapping": "y",
                           "cardinality": "1",
                           "factors": []
