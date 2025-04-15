@@ -1,0 +1,8 @@
+table filter=lfs diff=lfs merge=lfs -text
+"*.zip" filter=lfs diff=lfs merge=lfs -text
+"*.tar.gz" filter=lfs diff=lfs merge=lfs -text
+"*.gz" filter=lfs diff=lfs merge=lfs -text
+"*.csv" filter=lfs diff=lfs merge=lfs -text
+"*.png" filter=lfs diff=lfs merge=lfs -text
+"*.mdl" filter=lfs diff=lfs merge=lfs -text
+"*.gcs" filter=lfs diff=lfs merge=lfs -text

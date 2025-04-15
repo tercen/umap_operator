@@ -1,5 +1,0 @@
-"filename","Condition"
-"Donor1_303444.fcs","Control"
-"Donor2_303458.fcs","Control"
-"Donor3_3015036.fcs","Treatment"
-"Donor4_3014559.fcs","Treatment"

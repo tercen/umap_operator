@@ -1,0 +1,42 @@
+{
+ "kind": "FileDocument",
+ "id": "renv.lock",
+ "isDeleted": false,
+ "rev": "",
+ "description": "",
+ "name": "renv.lock",
+ "acl": {
+  "kind": "Acl",
+  "owner": "",
+  "aces": []
+ },
+ "createdDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "lastModifiedDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "urls": [],
+ "tags": [],
+ "meta": [],
+ "url": {
+  "kind": "Url",
+  "uri": ""
+ },
+ "version": "",
+ "isPublic": false,
+ "projectId": "",
+ "folderId": "",
+ "dataUri": "lfs/0a/f9/a99dbbcc1cf22eee6cdadd717e1fe2f16a68889257ab7908c79729128205",
+ "metadata": {
+  "kind": "FileMetadata",
+  "contentType": "",
+  "cacheControl": "",
+  "contentEncoding": "",
+  "contentLanguage": "",
+  "md5Hash": ""
+ },
+ "size": 8707
+}

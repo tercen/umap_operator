@@ -1,0 +1,291 @@
+{
+ "kind": "ComputedTableSchema",
+ "id": "db1d2a601c0a6903573266ba675cc51cf495ab69ed776f209ec6795642a73196",
+ "isDeleted": false,
+ "rev": "",
+ "description": "",
+ "name": "2a5960a0-19de-11f0-9796-a957102c1d69",
+ "acl": {
+  "kind": "Acl",
+  "owner": "",
+  "aces": []
+ },
+ "createdDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "lastModifiedDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "urls": [],
+ "tags": [],
+ "meta": [
+  {
+   "kind": "Pair",
+   "key": "SHA256",
+   "value": "db1d2a601c0a6903573266ba675cc51cf495ab69ed776f209ec6795642a73196"
+  }
+ ],
+ "url": {
+  "kind": "Url",
+  "uri": ""
+ },
+ "version": "",
+ "isPublic": false,
+ "projectId": "",
+ "folderId": "",
+ "nRows": 4000,
+ "columns": [
+  {
+   "kind": "ColumnSchema",
+   "id": "f27451be-1a0a-41ee-a5b9-aa9e1100e8f6",
+   "name": "ds1.umap.1",
+   "type": "double",
+   "nRows": 0,
+   "size": -1,
+   "metaData": {
+    "kind": "ColumnSchemaMetaData",
+    "sort": [],
+    "ascending": true,
+    "quartiles": [],
+    "properties": []
+   }
+  },
+  {
+   "kind": "ColumnSchema",
+   "id": "c98c7e9f-26b4-413d-8911-713b41df0a0c",
+   "name": "ds1.umap.2",
+   "type": "double",
+   "nRows": 0,
+   "size": -1,
+   "metaData": {
+    "kind": "ColumnSchemaMetaData",
+    "sort": [],
+    "ascending": true,
+    "quartiles": [],
+    "properties": []
+   }
+  },
+  {
+   "kind": "ColumnSchema",
+   "id": "5bfacb57-f2a0-4644-997f-1be92c77d9e9",
+   "name": ".ri",
+   "type": "int32",
+   "nRows": 0,
+   "size": -1,
+   "metaData": {
+    "kind": "ColumnSchemaMetaData",
+    "sort": [],
+    "ascending": true,
+    "quartiles": [],
+    "properties": []
+   }
+  }
+ ],
+ "dataDirectory": "data/db/1d/db1d2a601c0a6903573266ba675cc51cf495ab69ed776f209ec6795642a73196",
+ "relation": {
+  "kind": "Relation",
+  "id": "dadf515f-8ee7-4dc6-a6af-a9262779ba7c"
+ },
+ "size": 76968,
+ "query": {
+  "kind": "CubeQuery",
+  "relation": {
+   "kind": "CompositeRelation",
+   "id": "90f26ff6-61f7-4820-9648-b89f4c5b3351",
+   "joinOperators": [
+    {
+     "kind": "JoinOperator",
+     "joinType": "leftOuter",
+     "leftPair": {
+      "kind": "ColumnPair",
+      "lColumns": [
+       "channel_id"
+      ],
+      "rColumns": [
+       "channel_id"
+      ]
+     },
+     "rightRelation": {
+      "kind": "SimpleRelation",
+      "id": "f3c9a9c2364111148fccd5b67cb2f034609d378b18ad27773edb64efe7d78e08",
+      "index": 1
+     }
+    }
+   ],
+   "mainRelation": {
+    "kind": "SimpleRelation",
+    "id": "bea501e3d3e4493cdc72fcd51c21df21f87bdc32cec65a52d54c60f810dab999",
+    "index": 0
+   }
+  },
+  "colColumns": [
+   {
+    "kind": "Factor",
+    "name": "channel_name",
+    "type": "string"
+   },
+   {
+    "kind": "Factor",
+    "name": "channel_description",
+    "type": "string"
+   }
+  ],
+  "rowColumns": [
+   {
+    "kind": "Factor",
+    "name": "event_id",
+    "type": "double"
+   }
+  ],
+  "axisQueries": [
+   {
+    "kind": "CubeAxisQuery",
+    "pointSize": 4,
+    "chartType": "point",
+    "yAxis": {
+     "kind": "Factor",
+     "name": "value",
+     "type": "double"
+    },
+    "yAxisSettings": {
+     "kind": "AxisSettings",
+     "meta": []
+    },
+    "xAxis": {
+     "kind": "Factor",
+     "name": "",
+     "type": "string"
+    },
+    "xAxisSettings": {
+     "kind": "AxisSettings",
+     "meta": []
+    },
+    "errors": [],
+    "labels": [],
+    "colors": [],
+    "preprocessors": []
+   }
+  ],
+  "filters": {
+   "kind": "Filters",
+   "removeNaN": true,
+   "namedFilters": []
+  },
+  "operatorSettings": {
+   "kind": "OperatorSettings",
+   "namespace": "ds1",
+   "operatorRef": {
+    "kind": "OperatorRef",
+    "name": "UMAP",
+    "version": "b52874744d39e685be99e11a100979bf9bbf7269",
+    "operatorId": "1",
+    "operatorKind": "ROperator",
+    "propertyValues": [
+     {
+      "kind": "PropertyValue",
+      "name": "init",
+      "value": "spectral"
+     },
+     {
+      "kind": "PropertyValue",
+      "name": "scale",
+      "value": "none"
+     },
+     {
+      "kind": "PropertyValue",
+      "name": "n_neighbors",
+      "value": "15"
+     },
+     {
+      "kind": "PropertyValue",
+      "name": "spread",
+      "value": "1"
+     },
+     {
+      "kind": "PropertyValue",
+      "name": "min_dist",
+      "value": "0.5"
+     },
+     {
+      "kind": "PropertyValue",
+      "name": "pca",
+      "value": "-1"
+     },
+     {
+      "kind": "PropertyValue",
+      "name": "prop.train",
+      "value": "1"
+     },
+     {
+      "kind": "PropertyValue",
+      "name": "seed",
+      "value": "-1"
+     }
+    ],
+    "url": {
+     "kind": "Url",
+     "uri": "https://github.com/tercen/umap_operator"
+    },
+    "operatorSpec": {
+     "kind": "OperatorSpec",
+     "ontologyUri": "https://tercen.com/_ontology/tercen",
+     "ontologyVersion": "0.0.1",
+     "inputSpecs": [
+      {
+       "kind": "CrosstabSpec",
+       "metaFactors": [
+        {
+         "kind": "MetaFactor",
+         "name": "Channel",
+         "type": "",
+         "description": "The channel identifiers",
+         "ontologyMapping": "variable",
+         "crosstabMapping": "column",
+         "cardinality": "1..n",
+         "factors": []
+        },
+        {
+         "kind": "MetaFactor",
+         "name": "events",
+         "type": "",
+         "description": "the observations",
+         "ontologyMapping": "observation",
+         "crosstabMapping": "row",
+         "cardinality": "1..n",
+         "factors": []
+        }
+       ],
+       "axis": [
+        {
+         "kind": "AxisSpec",
+         "metaFactors": [
+          {
+           "kind": "MetaFactor",
+           "name": "data",
+           "type": "numeric",
+           "description": "the measurements",
+           "ontologyMapping": "measurement",
+           "crosstabMapping": "y",
+           "cardinality": "1",
+           "factors": []
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "outputSpecs": []
+    }
+   },
+   "environment": [],
+   "operatorModel": {
+    "kind": "OperatorModel"
+   }
+  },
+  "qtHash": "",
+  "columnHash": "",
+  "rowHash": ""
+ }
+}

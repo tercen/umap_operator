@@ -1,0 +1,42 @@
+{
+ "kind": "FileDocument",
+ "id": ".Rprofile",
+ "isDeleted": false,
+ "rev": "",
+ "description": "",
+ "name": ".Rprofile",
+ "acl": {
+  "kind": "Acl",
+  "owner": "",
+  "aces": []
+ },
+ "createdDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "lastModifiedDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "urls": [],
+ "tags": [],
+ "meta": [],
+ "url": {
+  "kind": "Url",
+  "uri": ""
+ },
+ "version": "",
+ "isPublic": false,
+ "projectId": "",
+ "folderId": "",
+ "dataUri": "lfs/3f/9d/62fc3f1bf5888a09816101b705f9844ef4cd44ee5ad157f4168dac4af4d4",
+ "metadata": {
+  "kind": "FileMetadata",
+  "contentType": "",
+  "cacheControl": "",
+  "contentEncoding": "",
+  "contentLanguage": "",
+  "md5Hash": ""
+ },
+ "size": 26
+}
