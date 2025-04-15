@@ -1,0 +1,42 @@
+{
+ "kind": "FileDocument",
+ "id": ".gitattributes",
+ "isDeleted": false,
+ "rev": "",
+ "description": "",
+ "name": ".gitattributes",
+ "acl": {
+  "kind": "Acl",
+  "owner": "",
+  "aces": []
+ },
+ "createdDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "lastModifiedDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "urls": [],
+ "tags": [],
+ "meta": [],
+ "url": {
+  "kind": "Url",
+  "uri": ""
+ },
+ "version": "",
+ "isPublic": false,
+ "projectId": "",
+ "folderId": "",
+ "dataUri": "lfs/02/c1/89d6b1f5e9e658186af8cb8a2817860e1822986552f97bbcbb4f2e4218c0",
+ "metadata": {
+  "kind": "FileMetadata",
+  "contentType": "",
+  "cacheControl": "",
+  "contentEncoding": "",
+  "contentLanguage": "",
+  "md5Hash": ""
+ },
+ "size": 352
+}

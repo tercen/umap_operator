@@ -1,0 +1,42 @@
+{
+ "kind": "FileDocument",
+ "id": "umap_operator.Rproj",
+ "isDeleted": false,
+ "rev": "",
+ "description": "",
+ "name": "umap_operator.Rproj",
+ "acl": {
+  "kind": "Acl",
+  "owner": "",
+  "aces": []
+ },
+ "createdDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "lastModifiedDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "urls": [],
+ "tags": [],
+ "meta": [],
+ "url": {
+  "kind": "Url",
+  "uri": ""
+ },
+ "version": "",
+ "isPublic": false,
+ "projectId": "",
+ "folderId": "",
+ "dataUri": "lfs/3a/81/ccc25a62f1a31c7d3404389935ced50831abea5e848408745ad1a1bf6126",
+ "metadata": {
+  "kind": "FileMetadata",
+  "contentType": "",
+  "cacheControl": "",
+  "contentEncoding": "",
+  "contentLanguage": "",
+  "md5Hash": ""
+ },
+ "size": 205
+}
