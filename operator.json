@@ -14,6 +14,7 @@
   "urls": [
     "https://github.com/tercen/umap_operator"
   ],
+  "container":"ghcr.io/tercen/umap_operator:specs",
   "properties": [
     {
       "kind": "EnumeratedProperty",
