@@ -1,0 +1,42 @@
+{
+ "kind": "FileDocument",
+ "id": "workflow_tests/FCS Files.zip",
+ "isDeleted": false,
+ "rev": "",
+ "description": "",
+ "name": "FCS Files.zip",
+ "acl": {
+  "kind": "Acl",
+  "owner": "",
+  "aces": []
+ },
+ "createdDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "lastModifiedDate": {
+  "kind": "Date",
+  "value": ""
+ },
+ "urls": [],
+ "tags": [],
+ "meta": [],
+ "url": {
+  "kind": "Url",
+  "uri": ""
+ },
+ "version": "",
+ "isPublic": false,
+ "projectId": "",
+ "folderId": "2",
+ "dataUri": "lfs/e1/19/22d4821bb4a5607c07126f420274a67c0f14a1f6da2b96a9c8e8943cc829",
+ "metadata": {
+  "kind": "FileMetadata",
+  "contentType": "",
+  "cacheControl": "",
+  "contentEncoding": "",
+  "contentLanguage": "",
+  "md5Hash": ""
+ },
+ "size": 720417
+}
