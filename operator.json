@@ -87,48 +87,48 @@
     "ontologyUri": "https://tercen.com/_ontology/tercen",
     "ontologyVersion": "0.0.1",
     "inputSpecs": [
-      {
-          "kind": "CrosstabSpec",
-          "metaFactors": [
-              {
-                  "kind": "MetaFactor",
-                  "name": "Channel",
-                  "type": "",
-                  "description": "The channel identifiers",
-                  "ontologyMapping": "variable",
-                  "crosstabMapping": "column",
-                  "cardinality": "1..n",
-                  "factors": []
-              },
-              {
-                  "kind": "MetaFactor",
-                  "name": "events",
-                  "type": "",
-                  "description": "the observations",
-                  "ontologyMapping": "observation",
-                  "crosstabMapping": "row",
-                  "cardinality": "1..n",
-                  "factors": []
-              }
-          ],
-          "axis": [
-              {
-                  "kind": "AxisSpec",
-                  "metaFactors": [
-                      {
-                          "kind": "MetaFactor",
-                          "name": "data",
-                          "type": "numeric",
-                          "description": "the measurements",
-                          "ontologyMapping": "measurement",
-                          "crosstabMapping": "y",
-                          "cardinality": "1",
-                          "factors": []
-                      }
-                  ]
-              }
-          ]
-      }
-  ]
+        {
+            "kind": "CrosstabSpec",
+            "metaFactors": [
+                {
+                    "kind": "MetaFactor",
+                    "name": "Variable",
+                    "type": "",
+                    "description": "Variable identifiers (genes, channels, markers, etc.)",
+                    "ontologyMapping": "variable",
+                    "crosstabMapping": "row",
+                    "cardinality": "1..n",
+                    "factors": []
+                },
+                {
+                    "kind": "MetaFactor",
+                    "name": "Observation",
+                    "type": "",
+                    "description": "Observation identifiers (cells, samples, individuals, etc.)",
+                    "ontologyMapping": "observation",
+                    "crosstabMapping": "column",
+                    "cardinality": "1..n",
+                    "factors": []
+                }
+            ],
+            "axis": [
+                {
+                    "kind": "AxisSpec",
+                    "metaFactors": [
+                        {
+                            "kind": "MetaFactor",
+                            "name": "Measurement",
+                            "type": "numeric",
+                            "description": "Measurement values",
+                            "ontologyMapping": "measurement",
+                            "crosstabMapping": "y",
+                            "cardinality": "1",
+                            "factors": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
   }
 }
