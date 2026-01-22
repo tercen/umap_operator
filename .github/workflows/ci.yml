@@ -22,7 +22,7 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
     - name: Pull tercenctl
-      run: docker pull tercen/tercenctl:release
+      run: docker pull tercen/tercenctl:0.6.0
     - name: Install operator
       run: |
         docker run --rm \
@@ -30,4 +30,4 @@ jobs:
           -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \
           -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \
           -e GITHUB_TOKEN=${GITHUB_TOKEN} \
-          tercen/tercenctl:release operator install --rm --tag ${GITHUB_SHA} --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
+          tercen/tercenctl:0.6.0 operator install --rm --tag ${GITHUB_SHA} --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}

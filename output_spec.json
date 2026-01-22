@@ -1,0 +1,37 @@
+{
+  "outputSpecs": [
+    {
+      "kind": "OperatorJoinSpec",
+      "joinOperators": [
+        {
+          "kind": "JoinOperator",
+          "joinType": "left",
+          "leftPair": {
+            "kind": "ColumnPair",
+            "lColumns": [
+              "Observation"
+            ],
+            "rColumns": [
+              "Observation"
+            ]
+          },
+          "rightRelation": {
+            "kind": "TableRelation",
+            "attributes": [
+              {
+                "kind": "Attribute",
+                "name": "umap.1",
+                "type": "double"
+              },
+              {
+                "kind": "Attribute",
+                "name": "umap.2",
+                "type": "double"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
