@@ -28,7 +28,7 @@ jobs:
       run: |
         echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
     - name: Pull tercenctl
-      run: docker pull tercen/tercenctl:0.6.0
+      run: docker pull tercen/tercenctl:0.7.0
     - name: Install operator
       run: |
         docker run --rm \
@@ -36,7 +36,7 @@ jobs:
           -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \
           -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \
           -e GITHUB_TOKEN=${GITHUB_TOKEN} \
-          tercen/tercenctl:0.6.0 operator install --rm --tag ${TAG} --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
+          tercen/tercenctl:0.7.0 operator install --rm --tag ${TAG} --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
     - name: Create required package.json
       run: echo '{}' > package.json
     - name: Build changelog
