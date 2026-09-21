@@ -1,0 +1,54 @@
+name: CI
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  # Weekly build with the layer cache off, so a cache that hides a broken clean build cannot go
+  # unnoticed between releases.
+  schedule:
+    - cron: '23 4 * * 2'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.94.0
+          components: rustfmt, clippy
+      - uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+  image:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: umap_rust_operator:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          no-cache: ${{ github.event_name == 'schedule' }}
+      - name: Size gate (cc tier, 40 MB compressed)
+        run: |
+          size=$(docker save umap_rust_operator:ci | gzip -1 | wc -c)
+          echo "compressed image: $size bytes"
+          test "$size" -le $((40 * 1024 * 1024))
+      - name: Smoke run as uid 1000 (binary starts, fails only on the missing task id)
+        run: |
+          set +e
+          out=$(docker run --rm --user 1000:1000 umap_rust_operator:ci 2>&1); code=$?
+          set -e
+          echo "$out"
+          test "$code" -eq 1
+          echo "$out" | grep -q "TERCEN_TASK_ID is not set"
