@@ -24,6 +24,16 @@ They were not at first: `umaprs`'s `transform` built its kNN index on the global
 regardless of the fit's thread count. Fixed in the library (the model now carries `threads`);
 this is what pinning by commit is for.
 
+### The platform test has not run on an instance yet
+
+`tercenctl operator install` pulls the image from GHCR even when the same tag is loaded in the
+instance's podman store, and a package published from a private repository starts private, so
+the `OperatorUnitTest` in `tests/` (2,000 public AML cells, `train_cells_per_sample = 500`,
+`threads = 1`, `absTol` 1e-6 against a Studio export) runs the first time the package is made
+public and the operator installed. The golden was cut from the server's own reading of the
+result, and two runs of it were byte-identical, so the test is expected to pass; it is still
+untested as a *test*.
+
 ### Memory model
 
 `intercept × n_main + 1.5 × offset`, MB. Fitted to the two full-fit points above — 65 B/value, 52 MB — and booked with headroom as
