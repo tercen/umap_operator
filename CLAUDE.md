@@ -36,6 +36,9 @@ spectral start, which is why:
 - the builder installs `gfortran` and `make`;
 - `Cargo.lock` pins `openblas-build`/`openblas-src` to **0.10.13**: 0.10.16 does not compile
   (`openblas-build requires the rustls or native-tls feature`). Re-pin after any `cargo update`.
+- the image sets `OPENBLAS_NUM_THREADS=1`: OpenBLAS otherwise spins a thread per core for the
+  spectral start's tiny eigenproblem — 14 s instead of 2 s on the 2,000-cell fixture. Set it
+  on the host too when timing the dev binary.
 - `umaprs` has no `license` field and no LICENSE file; that is Alex's to settle before this
   operator is published beyond Tercen.
 

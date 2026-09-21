@@ -32,5 +32,8 @@ COPY --from=builder /build/target/release/umap_operator /usr/local/bin/umap_oper
 COPY --from=builder --chown=1000:1000 /tmp-op /tmp
 USER 1000:1000
 WORKDIR /operator
-ENV RUST_BACKTRACE=1 RUST_LOG=info TMPDIR=/tmp
+# OpenBLAS (the spectral start, below 2,000 cells) otherwise spawns a spinning thread per core
+# for a problem that takes milliseconds: 14 s instead of 2 s on the test fixture. The platform
+# gives an operator one CPU in any case.
+ENV RUST_BACKTRACE=1 RUST_LOG=info TMPDIR=/tmp OPENBLAS_NUM_THREADS=1
 ENTRYPOINT ["/usr/local/bin/umap_operator"]
