@@ -1,5 +1,17 @@
 # Status
 
+## 0.1.1 (2026-09-22)
+
+- A training draw smaller than `n_neighbors` is refused (it was accepted and produced a layout of
+  ten cells).
+- Constant memory term 90 → 165 MB: below 2,000 training cells the spectral start does a dense
+  eigendecomposition — 149 MB at 2,000 cells, above the 98 MB the 0.1.0 model booked for that
+  projection.
+- `umaprs` pin moved to the commit that adds its MIT licence (code identical).
+- Shape matrix run end to end on Studio: no sample factor + draw (one-sample rule, logged),
+  `prop.train`, `scale = Z` + `spectral`, `pca` full fit, `pca` + draw (refused), tiny draw
+  (now refused), `n_neighbors` > cells (refused), bad `init` (refused).
+
 ## 0.1.0 (2026-09-22)
 
 First release. Rows = channels, columns = cells (+ sample), one embedding table back.
@@ -41,12 +53,15 @@ untested as a *test*.
 measured 177; a 1.6 M-cell × 40-channel cohort books 6.5 GB. Refit from `stats_d_actual_ram_peak`
 after real runs.
 
-### For the platform, not this crate
+### One CPU in production, and what that costs
 
-The platform books one CPU per operator task (`task_service.dart`, `cpus = 1.0`), enforced as a
-CFS quota. `umaprs` is parallel (kNN, fuzzy set, SGD, HNSW build) and gets 3–7× from 16 cores;
-in production it gets none of it. Operator-level CPU booking is a platform change to raise with
-Alex; the `threads` property is ready for it.
+The platform books **one CPU** for an operator task unless the task carries an explicit CPU
+request (`task_service.dart`: `cpus = 1.0` when none is set; the runner turns it into a podman
+`--cpus` quota and `OPENBLAS_NUM_THREADS`). `umaprs` is parallel throughout and rayon honours
+the quota, so nothing needs configuring: the operator uses what it is given. Measured in the
+image on the 50,500-cell full fit: **29 s at `--cpus 1`, 10 s at `--cpus 4`**, 4.4 s unlimited on
+16 cores. At cohort scale on one core (465k fit + 1.2 M transform at 40 dims, `taskset -c 0`):
+TODO_ONE_CPU. Acceptable for a batch step; a task booked more CPUs gets the speed-up for free.
 
 ### Left out
 

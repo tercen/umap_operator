@@ -53,6 +53,7 @@ purity, trustworthiness and neighbour stability on public AML data; the tables a
 
 ## Threads and the platform
 
-The platform books **one CPU per operator task**, enforced as a CFS quota, whatever `threads`
-says. Until that changes at the platform level, the operator is single-core in production and
-`threads` only matters on a machine you control. See `STATUS.md`.
+The platform books one CPU per operator task unless the task carries an explicit CPU request,
+and enforces it as a quota. `umaprs` is parallel and honours the quota, so `threads = 0` (the
+default) is right in production and gets more when more is booked. Measured: the 50,500-cell
+full fit takes 29 s on one CPU, 10 s on four. `threads = 1` is for bit-for-bit reproduction.

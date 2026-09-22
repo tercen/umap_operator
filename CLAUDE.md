@@ -23,7 +23,9 @@ with no order to rely on — and the memory model declares the cost.
 ## Memory
 
 Gather 8 B/value; `umaprs` then holds an `f32` copy, the kNN (k × n × 12 B), the CSR graph and
-the embedding. Measured in `STATUS.md`; refit `memory_model.json` from `stats_d_actual_ram_peak`
+the embedding. Below 2,000 training cells the spectral start does a **dense** eigendecomposition
+(n² doubles plus LAPACK workspace): 149 MB and 11 s at 2,000 cells, which is why the constant
+term is 165 MB and not 90 — a small projection is the *expensive* one per value. Measured in `STATUS.md`; refit `memory_model.json` from `stats_d_actual_ram_peak`
 once there are real runs.
 
 ## The library
@@ -39,8 +41,8 @@ spectral start, which is why:
 - the image sets `OPENBLAS_NUM_THREADS=1`: OpenBLAS otherwise spins a thread per core for the
   spectral start's tiny eigenproblem — 14 s instead of 2 s on the 2,000-cell fixture. Set it
   on the host too when timing the dev binary.
-- `umaprs` has no `license` field and no LICENSE file; that is Alex's to settle before this
-  operator is published beyond Tercen.
+- `umaprs` is MIT (licence added on the parity branch; the crate had none). This operator is
+  AGPL-3.0 like the other Tercen operators.
 
 ## Deliberate differences from the R operator
 

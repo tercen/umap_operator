@@ -153,6 +153,19 @@ async fn execute(ctx: &ContextBase, mode: Mode) -> Result<()> {
         s.prop_train,
         s.seed,
     )?;
+    if let Some(idx) = &train
+        && idx.len() <= s.n_neighbors
+    {
+        {
+            anyhow::bail!(
+                "the training draw has {} cells and n_neighbors is {}; the model needs more \
+                 training cells than neighbours. Raise train_cells_per_sample (or prop.train), \
+                 or lower n_neighbors.",
+                idx.len(),
+                s.n_neighbors
+            );
+        }
+    }
     if train.is_some() && s.pca.is_some() {
         anyhow::bail!(
             "pca cannot be combined with a training draw yet: the projection is not stored \
