@@ -5,8 +5,7 @@
   "inputDataUri": "umap_input.csv",
   "outputDataUri": [
     "table1.csv",
-    "table2.csv",
-    "table3.csv"
+    "table2.csv"
   ],
   "columns": [
     "cell_id",
