@@ -31,16 +31,13 @@ once there are real runs.
 ## The library
 
 `umaprs` is pinned by **commit** to the parity branch (`tercen/umaprs#1`). Move the pin to a tag
-once that PR is merged and tagged. It links OpenBLAS statically through `ndarray-linalg` for the
-spectral start, which is why:
+once that PR is merged and tagged. It is pure Rust since its `linalg.rs` (nalgebra's symmetric
+eigensolver replaced `ndarray-linalg` + a statically built OpenBLAS), so the image is the
+**static tier**: one musl binary on `scratch`, as flowsom. 0.1.0 and 0.1.1 were the cc tier
+with OpenBLAS; that build compiled kernels for whichever CPU the GitHub runner had — the weekly
+no-cache build failed on an AVX-512 runner, and a successful one was tuned to its runner —
+which is why the dependency went, not just the build flag.
 
-- the image is the **cc tier** (`distroless/cc`, glibc target) rather than `scratch`/musl;
-- the builder installs `gfortran` and `make`;
-- `Cargo.lock` pins `openblas-build`/`openblas-src` to **0.10.13**: 0.10.16 does not compile
-  (`openblas-build requires the rustls or native-tls feature`). Re-pin after any `cargo update`.
-- the image sets `OPENBLAS_NUM_THREADS=1`: OpenBLAS otherwise spins a thread per core for the
-  spectral start's tiny eigenproblem — 14 s instead of 2 s on the 2,000-cell fixture. Set it
-  on the host too when timing the dev binary.
 - `umaprs` is MIT (licence added on the parity branch; the crate had none). This operator is
   AGPL-3.0 like the other Tercen operators.
 

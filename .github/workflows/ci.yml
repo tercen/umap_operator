@@ -39,11 +39,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           no-cache: ${{ github.event_name == 'schedule' }}
-      - name: Size gate (cc tier, 40 MB compressed)
+      - name: Size gate (static tier, 20 MB compressed)
         run: |
           size=$(docker save umap_rust_operator:ci | gzip -1 | wc -c)
           echo "compressed image: $size bytes"
-          test "$size" -le $((40 * 1024 * 1024))
+          test "$size" -le $((20 * 1024 * 1024))
       - name: Smoke run as uid 1000 (binary starts, fails only on the missing task id)
         run: |
           set +e

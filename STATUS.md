@@ -1,5 +1,16 @@
 # Status
 
+## 0.1.2 (2026-09-22)
+
+- **No more OpenBLAS.** `umaprs` now does its symmetric eigendecompositions in pure Rust
+  (nalgebra), so the image is back on the static tier (musl on `scratch`). The weekly no-cache
+  CI build had failed inside OpenBLAS's own `make` on an AVX-512 runner, and a build that
+  succeeds is tuned to the runner's CPU — a shipped binary must not depend on which machine
+  GitHub handed out. Spectral start at 2,000 cells: 13 s (LAPACK: 11 s).
+- Golden regenerated: the eigenvectors are the same subspace but not the same numbers.
+- Platform test cut to the two relations the assembled result actually has (0.1.1's first
+  install on an instance said `bad.nRelations` for the three-table copy of flowsom's test).
+
 ## 0.1.1 (2026-09-22)
 
 - A training draw smaller than `n_neighbors` is refused (it was accepted and produced a layout of
@@ -36,15 +47,14 @@ They were not at first: `umaprs`'s `transform` built its kNN index on the global
 regardless of the fit's thread count. Fixed in the library (the model now carries `threads`);
 this is what pinning by commit is for.
 
-### The platform test has not run on an instance yet
+### The platform test
 
-`tercenctl operator install` pulls the image from GHCR even when the same tag is loaded in the
-instance's podman store, and a package published from a private repository starts private, so
-the `OperatorUnitTest` in `tests/` (2,000 public AML cells, `train_cells_per_sample = 500`,
-`threads = 1`, `absTol` 1e-6 against a Studio export) runs the first time the package is made
-public and the operator installed. The golden was cut from the server's own reading of the
-result, and two runs of it were byte-identical, so the test is expected to pass; it is still
-untested as a *test*.
+`tests/test.json` (2,000 public AML cells, two synthetic samples, `train_cells_per_sample = 500`,
+`threads = 1`, `absTol` 1e-6 against a Studio export of the server's own reading of the result)
+**passed on 0.1.1 installed on local Studio** (`TEST -- umap_draw500_per_sample_threads1
+successful`). 0.1.0's run of it failed on shape — three output tables listed where the assembled
+result has two — which is exactly the class of error only this test can see. The golden is
+regenerated for 0.1.2 (different eigensolver, same subspace, different numbers).
 
 ### Memory model
 
@@ -61,7 +71,7 @@ request (`task_service.dart`: `cpus = 1.0` when none is set; the runner turns it
 the quota, so nothing needs configuring: the operator uses what it is given. Measured in the
 image on the 50,500-cell full fit: **29 s at `--cpus 1`, 10 s at `--cpus 4`**, 4.4 s unlimited on
 16 cores. At cohort scale on one core (465k fit + 1.2 M transform at 40 dims, `taskset -c 0`):
-TODO_ONE_CPU. Acceptable for a batch step; a task booked more CPUs gets the speed-up for free.
+**525 s to fit and 758 s to project, 21 minutes** — workable for a batch step; a task booked more CPUs gets the speed-up for free.
 
 ### Left out
 

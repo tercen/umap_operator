@@ -1,39 +1,38 @@
 # syntax=docker/dockerfile:1.7
-# umap_rust_operator — cc tier (create-rust-operator §5): umaprs links OpenBLAS statically
-# (ndarray-linalg, for the spectral start), which needs a Fortran toolchain in the builder and
-# glibc at runtime, so the runtime is distroless/cc rather than scratch.
+# umap_rust_operator — static tier (create-rust-operator §5): one musl binary on scratch.
 
 # ---- builder ----
 FROM rust:1.94-bookworm AS builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        protobuf-compiler pkg-config git ca-certificates gfortran make \
- && rm -rf /var/lib/apt/lists/*
+        musl-tools protobuf-compiler pkg-config git ca-certificates \
+ && rm -rf /var/lib/apt/lists/* && rustup target add x86_64-unknown-linux-musl
 WORKDIR /build
 RUN cargo install cargo-chef --locked
 
 # Dependency layer. cargo-chef's recipe carries the package version, and a release commit always
-# bumps it, so the version is normalised for the recipe only and the real manifest restored.
+# bumps it, so the recipe would change on every release and the ~10 minute dependency build would
+# never be reused. Normalise the version for the recipe only, then restore the real manifest.
 COPY Cargo.toml Cargo.lock ./
+# The version is normalised because cargo-chef's recipe carries it, and a release commit always
+# bumps it: without this the ~10 minute dependency layer is never reused between releases.
 RUN cp Cargo.toml Cargo.toml.keep \
  && sed -i 's/^version = ".*"/version = "0.0.0"/' Cargo.toml \
  && cargo chef prepare --recipe-path recipe.json
-RUN cargo chef cook --release --recipe-path recipe.json
+RUN cargo chef cook --release --target x86_64-unknown-linux-musl --recipe-path recipe.json
 RUN mv Cargo.toml.keep Cargo.toml
 
 COPY src ./src
-COPY operator.json ./
-RUN cargo build --release --bin umap_operator \
- && ls -l target/release/umap_operator
+RUN cargo build --release --target x86_64-unknown-linux-musl --bin umap_operator \
+ && ls -l target/x86_64-unknown-linux-musl/release/umap_operator
+# scratch has no directories at all: build the writable temp dir here and copy it in.
 RUN mkdir -p /tmp-op && chown 1000:1000 /tmp-op
 
 # ---- runtime ----
-FROM gcr.io/distroless/cc-debian12:nonroot
-COPY --from=builder /build/target/release/umap_operator /usr/local/bin/umap_operator
+FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /build/target/x86_64-unknown-linux-musl/release/umap_operator /usr/local/bin/umap_operator
 COPY --from=builder --chown=1000:1000 /tmp-op /tmp
 USER 1000:1000
 WORKDIR /operator
-# OpenBLAS (the spectral start, below 2,000 cells) otherwise spawns a spinning thread per core
-# for a problem that takes milliseconds: 14 s instead of 2 s on the test fixture. The platform
-# gives an operator one CPU in any case.
-ENV RUST_BACKTRACE=1 RUST_LOG=info TMPDIR=/tmp OPENBLAS_NUM_THREADS=1
+ENV RUST_BACKTRACE=1 RUST_LOG=info TMPDIR=/tmp
 ENTRYPOINT ["/usr/local/bin/umap_operator"]

@@ -14,7 +14,7 @@
     "https://github.com/tercen/umap_rust_operator"
   ],
   "communicationProtocol": "grpc",
-  "container": "ghcr.io/tercen/umap_rust_operator:0.1.1",
+  "container": "ghcr.io/tercen/umap_rust_operator:0.1.2",
   "properties": [
     {
       "kind": "EnumeratedProperty",
