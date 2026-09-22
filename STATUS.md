@@ -63,15 +63,23 @@ regenerated for 0.1.2 (different eigensolver, same subspace, different numbers).
 measured 177; a 1.6 M-cell × 40-channel cohort books 6.5 GB. Refit from `stats_d_actual_ram_peak`
 after real runs.
 
-### One CPU in production, and what that costs
+### CPUs in production: booked from the projection, and the operator uses what it gets
 
-The platform books **one CPU** for an operator task unless the task carries an explicit CPU
-request (`task_service.dart`: `cpus = 1.0` when none is set; the runner turns it into a podman
-`--cpus` quota and `OPENBLAS_NUM_THREADS`). `umaprs` is parallel throughout and rayon honours
-the quota, so nothing needs configuring: the operator uses what it is given. Measured in the
-image on the 50,500-cell full fit: **29 s at `--cpus 1`, 10 s at `--cpus 4`**, 4.4 s unlimited on
-16 cores. At cohort scale on one core (465k fit + 1.2 M transform at 40 dims, `taskset -c 0`):
-**525 s to fit and 758 s to project, 21 minutes** — workable for a batch step; a task booked more CPUs gets the speed-up for free.
+The platform books an operator task's CPUs from the size of its crosstab: `ceil(values /
+tercen.query.rows.per.cpu)` with a default of 10 M values per CPU, capped by `tercen.task.max.cpus`
+(4 on tercen.com), the same estimate that sizes the cube query; a step can also set CPUs by
+hand. So a 9 M-value projection runs on **one CPU**, a 45 M-value one on **four** (both seen on
+tercen.com, 2026-09-22, `stats_d_estimated_cpu`), and the runner enforces it as a podman `--cpus`
+quota with `OPENBLAS_NUM_THREADS` to match. `umaprs` is parallel throughout and rayon honours the
+quota, so nothing needs configuring: `threads = 0` is right in production.
+
+Measured on tercen.com, 220,000 cells × 41 channels (9 M values), same input: **96 s at 4 CPUs,
+196 s at 1 CPU** — 2.0× from 4× the cores, because a platform task carries 60–70 s of serial
+work (streaming the crosstab out, upload, ingestion) that does not scale; the compute itself
+scaled ~3× (locally the 50k full fit went 29 s → 10 s from 1 to 4 CPUs). In the image on the
+50,500-cell full fit: 29 s at `--cpus 1`, 10 s at `--cpus 4`, 4.4 s unlimited on 16 cores. At
+cohort scale on one core (465k fit + 1.2 M transform at 40 dims, `taskset -c 0`): 525 s to fit
+and 758 s to project.
 
 ### Left out
 

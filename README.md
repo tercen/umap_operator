@@ -53,7 +53,7 @@ purity, trustworthiness and neighbour stability on public AML data; the tables a
 
 ## Threads and the platform
 
-The platform books one CPU per operator task unless the task carries an explicit CPU request,
-and enforces it as a quota. `umaprs` is parallel and honours the quota, so `threads = 0` (the
-default) is right in production and gets more when more is booked. Measured: the 50,500-cell
-full fit takes 29 s on one CPU, 10 s on four. `threads = 1` is for bit-for-bit reproduction.
+The platform books a task's CPUs from its crosstab size — one CPU per 10 M values, capped at 4 on
+tercen.com — or from a value set on the step, and enforces it as a quota. `umaprs` is parallel and
+honours the quota, so `threads = 0` (the default) is right in production. Measured on tercen.com,
+220k cells × 41 channels: 96 s at 4 CPUs, 196 s at 1. `threads = 1` is for bit-for-bit reproduction.
