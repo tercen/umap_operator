@@ -1,35 +1,51 @@
 {
   "kind": "OperatorUnitTest",
-  "name": "test",
-  "namespace": "ds00",
-  "inputDataUri": "test_in.csv",
-  "outputDataUri": ["test_out_1.csv", "test_out_2.csv"],
-  "columns": [
-    "Observation"
+  "name": "umap_draw500_per_sample_threads1",
+  "namespace": "ds0",
+  "inputDataUri": "umap_input.csv",
+  "outputDataUri": [
+    "table1.csv",
+    "table2.csv"
   ],
-  "rows": ["Variable"],
+  "columns": [
+    "cell_id",
+    "sample"
+  ],
+  "rows": [
+    "channel"
+  ],
   "colors": [],
   "labels": [],
-  "yAxis": "y_values",
+  "yAxis": "value",
   "xAxis": "",
-  "generatedOn": "06/24/2022 09:13:37 AM 2022",
+  "generatedOn": "09/22/2026 12:10:00 AM 2026",
   "version": "",
   "propertyValues": [
     {
-    "kind": "PropertyValue",
-    "name": "seed",
-    "value": "42"
+      "kind": "PropertyValue",
+      "name": "train_cells_per_sample",
+      "value": "500"
     },
     {
-    "kind": "PropertyValue",
-    "name": "n_neighbors",
-    "value": "5"
+      "kind": "PropertyValue",
+      "name": "sample_factor",
+      "value": "sample"
     },
     {
-    "kind": "PropertyValue",
-    "name": "min_dist",
-    "value": "0.01"
+      "kind": "PropertyValue",
+      "name": "min_dist",
+      "value": "0.01"
+    },
+    {
+      "kind": "PropertyValue",
+      "name": "seed",
+      "value": "42"
+    },
+    {
+      "kind": "PropertyValue",
+      "name": "threads",
+      "value": "1"
     }
   ],
-  "relTol": 1e-05
+  "absTol": 1e-06
 }

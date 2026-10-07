@@ -1,0 +1,48 @@
+[package]
+name = "umap_operator"
+version = "2.0.0"
+edition = "2024"
+description = "UMAP for Tercen (Rust): fit on a training draw, project the rest, one embedding per cell"
+license = "Apache-2.0"
+
+[lib]
+name = "umap_operator"
+path = "src/lib.rs"
+
+[[bin]]
+name = "umap_operator"
+path = "src/main.rs"
+
+[[bin]]
+name = "dev"
+path = "src/bin/dev.rs"
+
+[dependencies]
+anyhow = "1"
+tercen-rs = { git = "https://github.com/tercen/tercen-rs", branch = "main" }
+# Pinned to the umaprs 0.2.0 tag (tercen/umaprs#1 merged): the embedding is the operator's
+# output and must not move under a rebuild.
+umaprs = { git = "https://github.com/tercen/umaprs", tag = "0.2.0" }
+ndarray = "0.15"
+rand = "0.8"
+rand_chacha = "0.3"
+tokio = { version = "1.49", features = ["rt-multi-thread", "macros", "time"] }
+tonic = "0.14"
+futures = "0.3"
+rustson = { git = "https://github.com/tercen/rustson", branch = "master" }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tikv-jemallocator = "0.6"
+
+[dev-dependencies]
+serde_json = "1"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+panic = "abort"
+
+[profile.dev]
+opt-level = 1

@@ -1,12 +1,10 @@
 {
   "name": "UMAP",
-  "description": "Runs a Uniform Manifold Approximation and Projection, a dimensionality reduction method.",
+  "description": "Uniform Manifold Approximation and Projection of cells: fit on every cell, or on a seeded draw per sample and project the rest. Version 2 is a Rust implementation (umaprs, umap-learn 0.5.12 semantics) without the R runtime; layouts differ from 1.x (uwot).",
   "tags": [
     "dimensionality reduction",
-    "machine learning",
-    "flow cytometry",
-    "omics",
-    "sc-RNA-seq"
+    "umap",
+    "cytometry"
   ],
   "authors": [
     "tercen"
@@ -14,28 +12,26 @@
   "urls": [
     "https://github.com/tercen/umap_operator"
   ],
+  "communicationProtocol": "grpc",
+  "container": "ghcr.io/tercen/umap_operator:2.0.0",
   "properties": [
     {
       "kind": "EnumeratedProperty",
       "name": "init",
-      "defaultValue": "spectral",
-      "description": "Type of initialization for the coordinates",
+      "defaultValue": "auto",
+      "description": "Starting layout: auto (spectral below 2,000 cells, PCA above), spectral, pca or random. uwot's normlaplacian/laplacian/agspectral are taken as spectral, spca as pca, lvrandom as random.",
       "values": [
+        "auto",
         "spectral",
-        "normlaplacian",
-        "random",
-        "lvrandom",
-        "laplacian",
         "pca",
-        "spca",
-        "agspectral"
+        "random"
       ]
     },
     {
       "kind": "EnumeratedProperty",
       "name": "scale",
       "defaultValue": "none",
-      "description": "Type of scaling to apply to data",
+      "description": "Scaling before UMAP, with uwot's meaning: none; Z (each channel centred and divided by its standard deviation); maxabs (centred, then the whole matrix divided by its largest absolute value); range (whole matrix to [0, 1]); colrange (each channel to [0, 1]).",
       "values": [
         "none",
         "Z",
@@ -48,37 +44,61 @@
       "kind": "DoubleProperty",
       "name": "n_neighbors",
       "defaultValue": 15,
-      "description": "The size of local neighborhood (in terms of number of neighboring sample points) used for manifold approximation. Larger values result in more global views of the manifold, while smaller values result in more local data being preserved."
+      "description": "Size of the local neighbourhood used to build the graph. Larger values give a more global picture, smaller ones preserve more local structure."
     },
     {
       "kind": "DoubleProperty",
       "name": "spread",
       "defaultValue": 1,
-      "description": "The effective scale of embedded points. In combination with min_dist, this determines how clustered/clumped the embedded points are"
+      "description": "Effective scale of embedded points. With min_dist, sets how clumped the embedding is."
     },
     {
       "kind": "DoubleProperty",
       "name": "min_dist",
       "defaultValue": 0.5,
-      "description": "The effective minimum distance between embedded points"
+      "description": "Effective minimum distance between embedded points. The R operator's default; cytometry pipelines often use 0.01."
     },
     {
       "kind": "DoubleProperty",
       "name": "pca",
       "defaultValue": -1,
-      "description": "If set to a positive integer value, reduce data to this number of columns using PCA"
+      "description": "If positive, reduce the channels to this many principal components first. Not available together with a training draw (train_cells_per_sample or prop.train below 1)."
     },
     {
       "kind": "DoubleProperty",
       "name": "prop.train",
       "defaultValue": 1,
-      "description": "Proportion of data used to train the model. The rest of the data will be transformed. Default is 1 (all data is used)."
+      "description": "Fraction of cells to fit the model on; the rest are projected onto it. 1 fits on every cell. Ignored when train_cells_per_sample is set."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "train_cells_per_sample",
+      "defaultValue": 0,
+      "description": "Fit the model on this many cells drawn from every sample (all of a smaller sample), and project the rest. 0 is off. This is the shape a cohort needs \u2014 5,000 per file \u2014 which prop.train cannot express."
+    },
+    {
+      "kind": "StringProperty",
+      "name": "sample_factor",
+      "defaultValue": "",
+      "description": "Column factor that names the sample (file, donor), for train_cells_per_sample. Empty takes the first column factor, unless that factor has one value per cell, in which case all cells count as one sample and the log says so."
     },
     {
       "kind": "DoubleProperty",
       "name": "seed",
-      "defaultValue": -1,
-      "description": "Seed for random number generation. if less than 0, set a Random seed"
+      "defaultValue": 42,
+      "description": "Seed for the training draw, the layout and the optimisation. Must be non-negative: the same seed gives the same embedding at threads = 1."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "n_epochs",
+      "defaultValue": 0,
+      "description": "Optimisation epochs. 0 lets the library choose: 500 below 10,000 cells, 200 above, as umap-learn does."
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "threads",
+      "defaultValue": 0,
+      "description": "CPU threads. 0 uses every core the task is given. 1 is bit-for-bit reproducible run to run; above 1 the layout differs in the last digits between runs (parallel SGD), the picture does not."
     }
   ],
   "operatorSpec": {
@@ -93,20 +113,20 @@
             "kind": "MetaFactor",
             "name": "Variable",
             "type": "",
-            "description": "Variable identifiers (e.g. genes, channels, markers).",
+            "description": "Channel (or variable) name.",
             "ontologyMapping": "variable",
             "crosstabMapping": "row",
-            "cardinality": "1..n",
+            "cardinality": "0..n",
             "factors": []
           },
           {
             "kind": "MetaFactor",
             "name": "Observation",
             "type": "",
-            "description": "Observation identifiers (e.g. cells, samples, individuals).",
+            "description": "Cell, event or observation identifier, optionally with the sample it belongs to. Every cell needs a value for every channel.",
             "ontologyMapping": "observation",
             "crosstabMapping": "column",
-            "cardinality": "1..n",
+            "cardinality": "0..n",
             "factors": []
           }
         ],
@@ -118,7 +138,7 @@
                 "kind": "MetaFactor",
                 "name": "Measurement",
                 "type": "double",
-                "description": "Measurement values.",
+                "description": "Values to embed",
                 "ontologyMapping": "measurement",
                 "crosstabMapping": "y",
                 "cardinality": "1",

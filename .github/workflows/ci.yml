@@ -1,33 +1,54 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
 on:
   push:
-    branches: [main, master]
+    branches: ['**']
   pull_request:
-    branches: [main, master]
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  # Weekly build with the layer cache off, so a cache that hides a broken clean build cannot go
+  # unnoticed between releases.
+  schedule:
+    - cron: '23 4 * * 2'
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-    - name: Pull tercenctl
-      run: docker pull tercen/tercenctl:0.7.0
-    - name: Install operator
-      run: |
-        docker run --rm \
-          -e TERCEN_USERNAME=${{ secrets.TERCEN_TEST_OPERATOR_USERNAME }} \
-          -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \
-          -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \
-          -e GITHUB_TOKEN=${GITHUB_TOKEN} \
-          tercen/tercenctl:0.7.0 operator install --rm --tag ${GITHUB_SHA} --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.94.0
+          components: rustfmt, clippy
+      - uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+  image:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: umap_operator:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          no-cache: ${{ github.event_name == 'schedule' }}
+      - name: Size gate (static tier, 20 MB compressed)
+        run: |
+          size=$(docker save umap_operator:ci | gzip -1 | wc -c)
+          echo "compressed image: $size bytes"
+          test "$size" -le $((20 * 1024 * 1024))
+      - name: Smoke run as uid 1000 (binary starts, fails only on the missing task id)
+        run: |
+          set +e
+          out=$(docker run --rm --user 1000:1000 umap_operator:ci 2>&1); code=$?
+          set -e
+          echo "$out"
+          test "$code" -eq 1
+          echo "$out" | grep -q "TERCEN_TASK_ID is not set"
