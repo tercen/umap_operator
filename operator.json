@@ -13,7 +13,7 @@
     "https://github.com/tercen/umap_operator"
   ],
   "communicationProtocol": "grpc",
-  "container": "ghcr.io/tercen/umap_rust_operator:0.1.2",
+  "container": "ghcr.io/tercen/umap_operator:2.0.0",
   "properties": [
     {
       "kind": "EnumeratedProperty",
