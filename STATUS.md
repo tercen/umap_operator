@@ -18,7 +18,7 @@
 - Constant memory term 90 → 165 MB: below 2,000 training cells the spectral start does a dense
   eigendecomposition — 149 MB at 2,000 cells, above the 98 MB the 0.1.0 model booked for that
   projection.
-- `umaprs` pin moved to the commit that adds its MIT licence (code identical).
+- `umaprs` pinned to tag 0.2.0 (tercen/umaprs#1 merged, Apache-2.0; code identical to the earlier pin). Operator relicensed AGPL-3.0 → Apache-2.0 on 2026-10-08.
 - Shape matrix run end to end on Studio: no sample factor + draw (one-sample rule, logged),
   `prop.train`, `scale = Z` + `spectral`, `pca` full fit, `pca` + draw (refused), tiny draw
   (now refused), `n_neighbors` > cells (refused), bad `init` (refused).

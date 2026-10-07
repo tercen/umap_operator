@@ -3,7 +3,7 @@ name = "umap_operator"
 version = "0.1.2"
 edition = "2024"
 description = "UMAP for Tercen (Rust): fit on a training draw, project the rest, one embedding per cell"
-license = "AGPL-3.0"
+license = "Apache-2.0"
 
 [lib]
 name = "umap_operator"
@@ -20,9 +20,9 @@ path = "src/bin/dev.rs"
 [dependencies]
 anyhow = "1"
 tercen-rs = { git = "https://github.com/tercen/tercen-rs", branch = "main" }
-# Pinned to a commit of the parity branch (tercen/umaprs#1) until it is merged and tagged: the
-# embedding is the operator's output and must not move under a rebuild.
-umaprs = { git = "https://github.com/tercen/umaprs", rev = "d3a8d5feb04ddf3a75437e643811967ca8cc29ca" }
+# Pinned to the umaprs 0.2.0 tag (tercen/umaprs#1 merged): the embedding is the operator's
+# output and must not move under a rebuild.
+umaprs = { git = "https://github.com/tercen/umaprs", tag = "0.2.0" }
 ndarray = "0.15"
 rand = "0.8"
 rand_chacha = "0.3"

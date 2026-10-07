@@ -3644,7 +3644,7 @@ dependencies = [
 [[package]]
 name = "umaprs"
 version = "0.2.0"
-source = "git+https://github.com/tercen/umaprs?rev=d3a8d5feb04ddf3a75437e643811967ca8cc29ca#d3a8d5feb04ddf3a75437e643811967ca8cc29ca"
+source = "git+https://github.com/tercen/umaprs?tag=0.2.0#9e6103f8e10ed99c2376af7cf55731454fd37439"
 dependencies = [
  "gauss-quad",
  "nalgebra 0.33.3",
