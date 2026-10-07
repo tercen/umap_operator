@@ -230,8 +230,15 @@ mod tests {
             .collect();
         assert_eq!(attrs, ["umap.1", "umap.2"]);
         assert!(
-            m["container"].as_str().unwrap().contains(":0."),
-            "container must pin a version tag"
+            {
+                let c = m["container"].as_str().unwrap();
+                let tag = c.rsplit_once(':').map(|(_, t)| t).unwrap_or("");
+                tag.split('.').count() == 3
+                    && tag
+                        .split('.')
+                        .all(|p| !p.is_empty() && p.bytes().all(|b| b.is_ascii_digit()))
+            },
+            "container must pin an exact x.y.z version tag"
         );
     }
 }
