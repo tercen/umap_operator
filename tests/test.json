@@ -1,0 +1,51 @@
+{
+  "kind": "OperatorUnitTest",
+  "name": "umap_draw500_per_sample_threads1",
+  "namespace": "ds0",
+  "inputDataUri": "umap_input.csv",
+  "outputDataUri": [
+    "table1.csv",
+    "table2.csv"
+  ],
+  "columns": [
+    "cell_id",
+    "sample"
+  ],
+  "rows": [
+    "channel"
+  ],
+  "colors": [],
+  "labels": [],
+  "yAxis": "value",
+  "xAxis": "",
+  "generatedOn": "09/22/2026 12:10:00 AM 2026",
+  "version": "",
+  "propertyValues": [
+    {
+      "kind": "PropertyValue",
+      "name": "train_cells_per_sample",
+      "value": "500"
+    },
+    {
+      "kind": "PropertyValue",
+      "name": "sample_factor",
+      "value": "sample"
+    },
+    {
+      "kind": "PropertyValue",
+      "name": "min_dist",
+      "value": "0.01"
+    },
+    {
+      "kind": "PropertyValue",
+      "name": "seed",
+      "value": "42"
+    },
+    {
+      "kind": "PropertyValue",
+      "name": "threads",
+      "value": "1"
+    }
+  ],
+  "absTol": 1e-06
+}

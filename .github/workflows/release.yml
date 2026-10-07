@@ -1,0 +1,99 @@
+name: Release Workflow
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: tercen/umap_rust_operator
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Belt-and-suspenders: the committed operator.json must already pin
+      # this tag's image (release rule), but rewrite locally so the built
+      # image's own operator.json can never disagree with the tag.
+      - name: Update container in operator.json
+        run: |
+          jq --arg variable "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${GITHUB_REF##*/}" '.container = $variable' operator.json > operator.json.tmp
+          mv operator.json.tmp operator.json
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=pep440,pattern={{version}}
+          # No `latest`. The manifest pins an exact version, so a moving tag has no job here and
+          # is only a way to lose track of what ran: this image's `latest` has already moved
+          # between releases, which is how the pamgene csuka operator became unreproducible.
+          flavor: |
+            latest=false
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6.7.0
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Reuse the layers ci.yml built for this commit: ~13 min cold, ~3 min warm. A tag is only
+          # installable once this push finishes, so the cache shortens the window in which an
+          # install fails with `manifest unknown`. On a miss this is simply the old build time.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Pull tercenctl
+        run: docker pull tercen/tercenctl:release
+
+      # Install-check: fatal by design — a red release burns a patch number.
+      - name: Install operator
+        run: |
+          docker run --rm \
+            -e TERCEN_USERNAME=${{ secrets.TERCEN_TEST_OPERATOR_USERNAME }} \
+            -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \
+            -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \
+            -e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            tercen/tercenctl:release operator install --rm --tag ${GITHUB_SHA} --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
+
+      - name: Create required package.json
+        run: echo '{}' > package.json
+
+      - name: Build changelog
+        id: Changelog
+        uses: tercen/generate-changelog-action@master
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.Changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
