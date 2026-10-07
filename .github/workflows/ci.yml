@@ -35,19 +35,19 @@ jobs:
           context: .
           push: false
           load: true
-          tags: umap_rust_operator:ci
+          tags: umap_operator:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
           no-cache: ${{ github.event_name == 'schedule' }}
       - name: Size gate (static tier, 20 MB compressed)
         run: |
-          size=$(docker save umap_rust_operator:ci | gzip -1 | wc -c)
+          size=$(docker save umap_operator:ci | gzip -1 | wc -c)
           echo "compressed image: $size bytes"
           test "$size" -le $((20 * 1024 * 1024))
       - name: Smoke run as uid 1000 (binary starts, fails only on the missing task id)
         run: |
           set +e
-          out=$(docker run --rm --user 1000:1000 umap_rust_operator:ci 2>&1); code=$?
+          out=$(docker run --rm --user 1000:1000 umap_operator:ci 2>&1); code=$?
           set -e
           echo "$out"
           test "$code" -eq 1

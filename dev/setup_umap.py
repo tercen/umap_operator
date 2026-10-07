@@ -51,9 +51,9 @@ ct.columnTable = ctable([gf(COL, "double"), gf(SAMPLE, "string")])
 ct.rowTable = ctable([gf(ROW, "string")])
 ct.filters = m.Filters(); ct.filters.removeNaN = False; ct.filters.namedFilters = []
 st = m.OperatorSettings(); st.namespace = "ds0"; st.environment = []
-ref = m.OperatorRef(); ref.name = "umap_rust_operator"; ref.version = "dev"
+ref = m.OperatorRef(); ref.name = "umap_operator"; ref.version = "dev"
 ref.operatorId = ""; ref.operatorKind = ""
-ref.url = m.Url(); ref.url.uri = "https://github.com/tercen/umap_rust_operator"
+ref.url = m.Url(); ref.url.uri = "https://github.com/tercen/umap_operator"
 ref.propertyValues = []
 for k, v in props.items():
     pv = m.PropertyValue(); pv.name = k; pv.value = v; ref.propertyValues.append(pv)

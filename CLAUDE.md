@@ -1,4 +1,4 @@
-# umap_rust_operator — notes for whoever works on this next
+# umap_operator — notes for whoever works on this next
 
 Built 2026-09-22 with the `create-rust-operator` skill, from the `flowsom_rust_operator`
 scaffold. Read `README.md` first.
@@ -60,7 +60,7 @@ the last digits scheduling-dependent.
 
 `tests/test.json`: public 2,000-cell subset of Levine-32 AML (from `umaprs/data`), two synthetic
 samples of 1,000, `train_cells_per_sample = 500`, `threads = 1`, `seed = 42`. Golden exported from a
-Studio dev run (project "umap_rust_operator dev", 2026-09-22). Two output tables — the embedding and the column
+Studio dev run (project "umap_operator dev", 2026-09-22). Two output tables — the embedding and the column
 table — because a `.ci`-keyed result joins the column relation only, not the row relation
 (the first install on an instance failed with `bad.nRelations` on a three-table copy of
 flowsom's test). It guards the join, the shape and the coordinates at `absTol` 1e-6; a different `umaprs` commit is expected to move the

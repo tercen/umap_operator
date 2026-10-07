@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: tercen/umap_rust_operator
+  IMAGE_NAME: tercen/umap_operator
 
 jobs:
   build-and-push-image:

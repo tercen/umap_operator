@@ -1,17 +1,16 @@
 {
-  "name": "UMAP (Rust)",
-  "description": "Uniform Manifold Approximation and Projection of cells: fit on every cell, or on a seeded draw per sample and project the rest. A drop-in for the R UMAP operator without the R runtime; the library (umaprs) reproduces umap-learn's graph and transform stage by stage.",
+  "name": "UMAP",
+  "description": "Uniform Manifold Approximation and Projection of cells: fit on every cell, or on a seeded draw per sample and project the rest. Version 2 is a Rust implementation (umaprs, umap-learn 0.5.12 semantics) without the R runtime; layouts differ from 1.x (uwot).",
   "tags": [
     "dimensionality reduction",
     "umap",
-    "cytometry",
-    "rust"
+    "cytometry"
   ],
   "authors": [
     "tercen"
   ],
   "urls": [
-    "https://github.com/tercen/umap_rust_operator"
+    "https://github.com/tercen/umap_operator"
   ],
   "communicationProtocol": "grpc",
   "container": "ghcr.io/tercen/umap_rust_operator:0.1.2",
@@ -75,7 +74,7 @@
       "kind": "DoubleProperty",
       "name": "train_cells_per_sample",
       "defaultValue": 0,
-      "description": "Fit the model on this many cells drawn from every sample (all of a smaller sample), and project the rest. 0 is off. This is the shape a cohort needs — 5,000 per file — which prop.train cannot express."
+      "description": "Fit the model on this many cells drawn from every sample (all of a smaller sample), and project the rest. 0 is off. This is the shape a cohort needs \u2014 5,000 per file \u2014 which prop.train cannot express."
     },
     {
       "kind": "StringProperty",

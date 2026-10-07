@@ -1,8 +1,23 @@
-# UMAP (Rust) — Tercen operator
+# umap_operator
 
-Uniform Manifold Approximation and Projection of cells, as a drop-in for the R `umap_operator`,
-without the R runtime. The library is [`umaprs`](https://github.com/tercen/umaprs), which
+Uniform Manifold Approximation and Projection of cells. **Version 2 is a Rust implementation**
+that replaces the R one (1.x, a wrapper of `uwot::umap()`, kept on the
+[`r-legacy`](https://github.com/tercen/umap_operator/tree/r-legacy) branch and the
+`r-legacy-1.3.0` tag). It was developed as `tercen/umap_rust_operator` and merged here with its
+history. Same projection, same property names, same output columns (`umap.1`, `umap.2`), without
+the R runtime. The library is [`umaprs`](https://github.com/tercen/umaprs), which
 reproduces `umap-learn 0.5.12`'s graph and transform stage by stage (see its `STATUS.md`).
+
+## Changes from 1.x
+
+- **The layout is different.** 1.x ran `uwot`; 2.0 follows `umap-learn 0.5.12`. The same data
+  gives a different (equally valid) embedding, so plots and anything keyed on coordinates change.
+  Clusters and neighbourhoods are preserved; coordinates are not comparable across versions.
+- **`seed` defaults to 42 and must be non-negative.** 1.x defaulted to −1 (random).
+- **`init` defaults to `auto`** (spectral below 2,000 cells, PCA above); 1.x defaulted to
+  `spectral`. uwot's init names are still accepted.
+- **New properties:** `train_cells_per_sample`, `sample_factor`, `n_epochs`, `threads`.
+- **gRPC operator**, static image; needs a Tercen server with gRPC operator support.
 
 ## Projection
 

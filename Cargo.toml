@@ -1,6 +1,6 @@
 [package]
 name = "umap_operator"
-version = "0.1.2"
+version = "2.0.0"
 edition = "2024"
 description = "UMAP for Tercen (Rust): fit on a training draw, project the rest, one embedding per cell"
 license = "Apache-2.0"
