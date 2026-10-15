@@ -1,6 +1,18 @@
 # Status
 
 
+
+## 2.1.0 (2026-10-16): umaprs 0.3.0 — uwot's spectral start
+
+- `init = auto` and `spectral` now start from the normalised-Laplacian eigenvectors at every size
+  (dense up to 2,000 cells, sparse Lanczos above, as uwot's RSpectra); a disconnected graph gets the
+  PCA start (uwot's `spca`). The task log names the start and the solve time.
+- On public Levine-13 (81,747 cells, 24 gated populations) the map agrees with uwot's at 0.97
+  (Procrustes; uwot seed-to-seed 0.96): 2.0.1's random start gave 0.27, 2.0.2's PCA start 0.65.
+  Full comparison: the morning report of 2026-10-16 (`~/tercen/goals/2026-10-16-umap-ready/`).
+- umaprs's `eigh` now pairs eigenvalues with their own vectors (nalgebra could swap the two
+  smallest); the platform test's output is bit-identical (Studio dev run).
+
 ## 2.0.2 (2026-10-16): umaprs 0.2.2
 
 - **One-CPU speed.** umaprs's exact kd-tree (≤ 16 channels) was 58% of a one-core fit; rebuilt, it

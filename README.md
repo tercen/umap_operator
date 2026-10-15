@@ -40,7 +40,7 @@ One table, one row per cell, joined on the column (observation): `umap.1`, `umap
 
 | name | default | meaning |
 |---|---|---|
-| `init` | `auto` | starting layout: `auto` (spectral below 2,000 cells, PCA above), `spectral` (the same: above 2,000 cells the PCA start, uwot's `spca`; 2.0.0–2.0.1 used a random start there), `pca`, `random`. The task log says which start was used. uwot's `normlaplacian`/`laplacian`/`agspectral` are read as `spectral`, `spca` as `pca`, `lvrandom` as `random` |
+| `init` | `auto` | starting layout: `auto` = `spectral`, as uwot and umap-learn: the normalised-Laplacian eigenvectors (dense up to 2,000 cells, sparse Lanczos above, as uwot's RSpectra), or the PCA start (uwot's `spca`) when the graph is disconnected; `pca`; `random`. The task log says which start was used and how long the solve took. (2.0.0–2.0.1 used a random start above 2,000 cells; 2.0.2 the PCA start.) uwot's `normlaplacian`/`laplacian`/`agspectral` are read as `spectral`, `spca` as `pca`, `lvrandom` as `random` |
 | `scale` | `none` | `none`, `Z`, `maxabs`, `range`, `colrange` — uwot's meanings |
 | `n_neighbors` | 15 | neighbourhood size |
 | `spread` | 1 | effective scale of the embedding |

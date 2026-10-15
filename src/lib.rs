@@ -24,7 +24,6 @@ pub mod upload;
 
 use std::sync::Arc;
 use std::time::Instant;
-use umaprs::InitMethod;
 
 use anyhow::{Context, Result, anyhow};
 use ndarray::Array2;
@@ -182,18 +181,6 @@ async fn execute(ctx: &ContextBase, mode: Mode) -> Result<()> {
         );
     }
 
-    // Say which start the fit uses: `spectral` (the R operator's default, so every upgraded
-    // step) is a dense eigendecomposition only up to 2,000 cells, and above that the PCA start
-    // uwot itself falls back to ("spca").
-    let n_fit = train.as_ref().map_or(n_cells, |idx| idx.len());
-    if matches!(s.init, InitMethod::Spectral | InitMethod::Auto) && n_fit > 2000 {
-        rep.info(format!(
-            "init: {n_fit} cells to fit, so the start is PCA (the first two principal \
-             components, each scaled to sd 1: uwot's 'spca'); a spectral start is computed up \
-             to 2,000 cells"
-        ));
-    }
-
     let mut umap = umaprs::UMAP::new()
         .n_neighbors(s.n_neighbors)
         .min_dist(s.min_dist)
@@ -264,6 +251,11 @@ async fn execute(ctx: &ContextBase, mode: Mode) -> Result<()> {
             (x, y)
         }
     };
+    // Which start the fit used, as umaprs reports it: spectral (dense up to 2,000 cells, sparse
+    // Lanczos above, as uwot), or the PCA start when the graph is disconnected.
+    if let Some(note) = umap.init_note() {
+        rep.info(format!("init: {note}"));
+    }
     tracing::info!(
         secs = format!("{:.1}", t.elapsed().as_secs_f64()),
         "embedding done"
