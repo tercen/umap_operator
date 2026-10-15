@@ -40,8 +40,10 @@ pub struct Settings {
     /// `sample_factor`: the column factor that names the sample. Empty takes the first column
     /// factor — unless that factor has one value per cell, which is the event id, not a sample.
     pub sample_factor: String,
-    /// `seed`. Always set; a negative value is refused rather than read as "random".
+    /// `seed` used for this run. A negative property (1.x's default) means "random": a seed
+    /// is drawn per run and `seed_random` is set so the log can name it.
     pub seed: u64,
+    pub seed_random: bool,
     /// `n_epochs`: 0 lets the library choose (500 below 10,000 cells, 200 above, as umap-learn).
     pub n_epochs: usize,
     /// `threads`: 0 is every core the container is given. 1 is bit-for-bit reproducible.
@@ -61,10 +63,27 @@ impl Default for Settings {
             train_cells_per_sample: 0,
             sample_factor: String::new(),
             seed: 42,
+            seed_random: false,
             n_epochs: 0,
             threads: 0,
         }
     }
+}
+
+/// `seed` as the R operator (1.x) reads it: a negative value, its default, means "random". A
+/// fresh seed is then drawn for this run and returned with `true`, so the caller can tell the
+/// user which seed was used and how to repeat the run.
+fn seed_from(v: f64, draw: impl FnOnce() -> u64) -> (u64, bool) {
+    if v < 0.0 {
+        (draw(), true)
+    } else {
+        (v as u64, false)
+    }
+}
+
+/// A seed the property panel can hold exactly and a user can type back in.
+fn random_seed() -> u64 {
+    u64::from(rand::random::<u32>() >> 1)
 }
 
 /// Read the properties off the task's `CubeQueryTask` snapshot.
@@ -124,18 +143,7 @@ pub fn read(ctx: &ContextBase) -> Result<Settings> {
         bail!("property 'prop.train' must be between 0 and 1, got {prop_train}");
     }
     let train_cells_per_sample = num("train_cells_per_sample", 0.0)?.max(0.0) as usize;
-    let seed = {
-        let v = num("seed", d.seed as f64)?;
-        if v < 0.0 {
-            // The R operator reads a negative seed as "random". A step that cannot be re-run to
-            // the same picture is a bug in a workflow, so refuse instead.
-            bail!(
-                "property 'seed' is {v}; this operator needs a seed it can repeat. Use any \
-                 non-negative number."
-            );
-        }
-        v as u64
-    };
+    let (seed, seed_random) = seed_from(num("seed", d.seed as f64)?, random_seed);
     let s = Settings {
         init,
         scale,
@@ -147,6 +155,7 @@ pub fn read(ctx: &ContextBase) -> Result<Settings> {
         train_cells_per_sample,
         sample_factor: text("sample_factor"),
         seed,
+        seed_random,
         n_epochs: num("n_epochs", 0.0)?.max(0.0) as usize,
         threads: num("threads", 0.0)?.max(0.0) as usize,
     };
@@ -165,6 +174,38 @@ mod tests {
 
     /// Every property the reader looks at is declared, with the same default; the manifest's
     /// `kind`s come from the platform's closed vocabulary.
+    /// The platform books `intercept × n_cols + 1.5 × offset` MB, and `n_cols` is the number of
+    /// cells (the column table). A full fit costs about 2.1 KB per cell at 8 channels and 2.6 KB
+    /// at 40 (`examples/fit_memory.rs`); 2.0.0 booked by value and so gave 8-channel data a
+    /// third of what it needed (695,052 cells: 756 MB booked, killed at 794 MB).
+    #[test]
+    fn memory_model_books_a_full_fit_by_cells() {
+        let m: Value = serde_json::from_str(include_str!("../memory_model.json")).unwrap();
+        assert_eq!(m["features"][0]["name"], "n_cols");
+        let book = |cells: f64| {
+            m["intercept"].as_f64().unwrap() * cells + 1.5 * m["offset"].as_f64().unwrap()
+        };
+        // Measured fit peaks (MB), with 20% headroom on top for reading and writing.
+        for (cells, measured) in [(100_000.0, 210.0), (300_000.0, 607.0), (695_052.0, 1435.0)] {
+            assert!(
+                book(cells) >= 1.2 * measured,
+                "{cells} cells book {}",
+                book(cells)
+            );
+        }
+        assert!(book(200_000.0) >= 1.2 * 517.0, "40 channels");
+    }
+
+    #[test]
+    fn a_negative_seed_means_random_and_says_so() {
+        assert_eq!(seed_from(-1.0, || 7), (7, true));
+        assert_eq!(seed_from(-3.0, || 9), (9, true));
+        assert_eq!(seed_from(0.0, || 7), (0, false));
+        assert_eq!(seed_from(123.0, || 7), (123, false));
+        // Drawn seeds fit a property value exactly, so a user can type one back in.
+        assert!((0..1000).all(|_| random_seed() <= i32::MAX as u64));
+    }
+
     #[test]
     fn manifest_declares_what_the_code_reads() {
         let m = manifest();
