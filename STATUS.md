@@ -58,10 +58,26 @@ regenerated for 0.1.2 (different eigensolver, same subspace, different numbers).
 
 ### Memory model
 
-`intercept × n_main + 1.5 × offset`, MB. Fitted to the two full-fit points above — 65 B/value, 52 MB — and booked with headroom as
-`0.0001` MB/value and `offset` 60 (so 90 MB constant): 1.92 M values book 282 MB against a
-measured 177; a 1.6 M-cell × 40-channel cohort books 6.5 GB. Refit from `stats_d_actual_ram_peak`
-after real runs.
+`intercept × n_cols + 1.5 × offset`, MB, where `n_cols` is the number of cells (the column table).
+**2.0.1** books `0.004` MB per cell and `offset` 140 (210 MB constant). 2.0.0 booked per value
+(`0.0001` × `n_main`), fitted on 38-channel data; with few channels that is far too little,
+because a full fit's cost is per cell. On tercen.com (2026-10-15) a full fit of 695,052 cells ×
+8 channels booked 756 MB and was killed at 794 MB after 620 s.
+
+Full-fit peaks, `examples/fit_memory.rs` under `/usr/bin/time -v` (16 cores, synthetic mixture):
+
+| cells × channels | fit | peak RSS |
+|---|---|---|
+| 100,000 × 8 | 9.3 s | 210 MB |
+| 300,000 × 8 | 34.9 s | 607 MB |
+| 695,052 × 8 | 101.8 s | 1,435 MB |
+| 200,000 × 40 | 33.6 s | 517 MB |
+
+About 2.06 KB per cell at 8 channels plus ~17 B per extra channel per cell. The model books
+4 KB per cell to cover reading and writing and up to ~100 channels: 695k cells book 2.99 GB, a
+1.6 M-cell cohort 6.6 GB. A training draw (`prop.train` < 1) needs less; the model cannot see the
+property's effect, so it books for the full fit. The test `memory_model_books_a_full_fit_by_cells`
+pins the measured points.
 
 ### CPUs in production: booked from the projection, and the operator uses what it gets
 

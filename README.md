@@ -13,7 +13,8 @@ reproduces `umap-learn 0.5.12`'s graph and transform stage by stage (see its `ST
 - **The layout is different.** 1.x ran `uwot`; 2.0 follows `umap-learn 0.5.12`. The same data
   gives a different (equally valid) embedding, so plots and anything keyed on coordinates change.
   Clusters and neighbourhoods are preserved; coordinates are not comparable across versions.
-- **`seed` defaults to 42 and must be non-negative.** 1.x defaulted to −1 (random).
+- **`seed` defaults to 42.** 1.x defaulted to −1 (random); since 2.0.1 a negative seed, as every
+  step upgraded from 1.x carries, is read as 42 with a warning in the log (2.0.0 refused it).
 - **`init` defaults to `auto`** (spectral below 2,000 cells, PCA above); 1.x defaulted to
   `spectral`. uwot's init names are still accepted.
 - **New properties:** `train_cells_per_sample`, `sample_factor`, `n_epochs`, `threads`.
@@ -47,7 +48,7 @@ One table, one row per cell, joined on the column (observation): `umap.1`, `umap
 | `prop.train` | 1 | fraction of cells to fit on; the rest are projected |
 | `train_cells_per_sample` | 0 | fit on this many cells from **every** sample and project the rest; overrides `prop.train` |
 | `sample_factor` | | the column factor naming the sample; empty takes the first, unless that has one value per cell |
-| `seed` | 42 | non-negative; drives the draw, the layout and the optimisation |
+| `seed` | 42 | drives the draw, the layout and the optimisation; a negative value (1.x's "random") is read as 42 |
 | `n_epochs` | 0 | 0 = 500 below 10,000 cells, 200 above |
 | `threads` | 0 | 0 = every core given; 1 = bit-for-bit reproducible |
 

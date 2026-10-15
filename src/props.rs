@@ -67,6 +67,20 @@ impl Default for Settings {
     }
 }
 
+/// The R operator (1.x) defaults `seed` to -1, read as "random", so every step upgraded from 1.x
+/// carries -1. Any fixed seed is one possible random draw, so a negative seed takes the default
+/// rather than failing the step, and the result can still be repeated.
+fn seed_from(v: f64, default: u64) -> u64 {
+    if v < 0.0 {
+        tracing::warn!(
+            "property 'seed' is {v} (the R operator's 'random'); using {default} so the step \
+             can be repeated"
+        );
+        return default;
+    }
+    v as u64
+}
+
 /// Read the properties off the task's `CubeQueryTask` snapshot.
 pub fn read(ctx: &ContextBase) -> Result<Settings> {
     let pr = PropertyReader::from_operator_settings(ctx.operator_settings());
@@ -124,18 +138,7 @@ pub fn read(ctx: &ContextBase) -> Result<Settings> {
         bail!("property 'prop.train' must be between 0 and 1, got {prop_train}");
     }
     let train_cells_per_sample = num("train_cells_per_sample", 0.0)?.max(0.0) as usize;
-    let seed = {
-        let v = num("seed", d.seed as f64)?;
-        if v < 0.0 {
-            // The R operator reads a negative seed as "random". A step that cannot be re-run to
-            // the same picture is a bug in a workflow, so refuse instead.
-            bail!(
-                "property 'seed' is {v}; this operator needs a seed it can repeat. Use any \
-                 non-negative number."
-            );
-        }
-        v as u64
-    };
+    let seed = seed_from(num("seed", d.seed as f64)?, d.seed);
     let s = Settings {
         init,
         scale,
@@ -165,6 +168,36 @@ mod tests {
 
     /// Every property the reader looks at is declared, with the same default; the manifest's
     /// `kind`s come from the platform's closed vocabulary.
+    /// The platform books `intercept × n_cols + 1.5 × offset` MB, and `n_cols` is the number of
+    /// cells (the column table). A full fit costs about 2.1 KB per cell at 8 channels and 2.6 KB
+    /// at 40 (`examples/fit_memory.rs`); 2.0.0 booked by value and so gave 8-channel data a
+    /// third of what it needed (695,052 cells: 756 MB booked, killed at 794 MB).
+    #[test]
+    fn memory_model_books_a_full_fit_by_cells() {
+        let m: Value = serde_json::from_str(include_str!("../memory_model.json")).unwrap();
+        assert_eq!(m["features"][0]["name"], "n_cols");
+        let book = |cells: f64| {
+            m["intercept"].as_f64().unwrap() * cells + 1.5 * m["offset"].as_f64().unwrap()
+        };
+        // Measured fit peaks (MB), with 20% headroom on top for reading and writing.
+        for (cells, measured) in [(100_000.0, 210.0), (300_000.0, 607.0), (695_052.0, 1435.0)] {
+            assert!(
+                book(cells) >= 1.2 * measured,
+                "{cells} cells book {}",
+                book(cells)
+            );
+        }
+        assert!(book(200_000.0) >= 1.2 * 517.0, "40 channels");
+    }
+
+    #[test]
+    fn a_negative_seed_from_1x_takes_the_default() {
+        assert_eq!(seed_from(-1.0, 42), 42);
+        assert_eq!(seed_from(-7.0, 42), 42);
+        assert_eq!(seed_from(0.0, 42), 0);
+        assert_eq!(seed_from(123.0, 42), 123);
+    }
+
     #[test]
     fn manifest_declares_what_the_code_reads() {
         let m = manifest();

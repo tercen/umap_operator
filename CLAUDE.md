@@ -25,8 +25,9 @@ with no order to rely on — and the memory model declares the cost.
 Gather 8 B/value; `umaprs` then holds an `f32` copy, the kNN (k × n × 12 B), the CSR graph and
 the embedding. Below 2,000 training cells the spectral start does a **dense** eigendecomposition
 (n² doubles plus LAPACK workspace): 149 MB and 11 s at 2,000 cells, which is why the constant
-term is 165 MB and not 90 — a small projection is the *expensive* one per value. Measured in `STATUS.md`; refit `memory_model.json` from `stats_d_actual_ram_peak`
-once there are real runs.
+term is 165 MB and not 90 — a small projection is the *expensive* one per value. The model books **per cell** (`n_cols`), not per value: a full fit costs ~2 KB a cell
+whatever the channel count, so a per-value model starves few-channel data (2.0.0 was killed on
+695k × 8). Measured in `STATUS.md`.
 
 ## The library
 
@@ -43,7 +44,8 @@ which is why the dependency went, not just the build flag.
 
 ## Deliberate differences from the R operator
 
-- A negative `seed` is refused (R reads it as "random").
+- A negative `seed` (R's "random", the 1.x default every upgraded step carries) is read as the
+  default 42 with a warning; 2.0.0 refused it and broke every upgraded step.
 - `pca` with a training draw is refused: the projection is not stored on the model, so the
   remaining cells could not be transformed. Fit on every cell, or drop `pca`.
 - `init` offers four values; uwot's variants are mapped (see README).

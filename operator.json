@@ -86,7 +86,7 @@
       "kind": "DoubleProperty",
       "name": "seed",
       "defaultValue": 42,
-      "description": "Seed for the training draw, the layout and the optimisation. Must be non-negative: the same seed gives the same embedding at threads = 1."
+      "description": "Seed for the training draw, the layout and the optimisation. A negative value (the 1.x default, random) is read as 42. The same seed gives the same embedding at threads = 1."
     },
     {
       "kind": "DoubleProperty",
