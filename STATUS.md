@@ -1,5 +1,16 @@
 # Status
 
+
+## 2.0.2 (2026-10-16): umaprs 0.2.2
+
+- **One-CPU speed.** umaprs's exact kd-tree (≤ 16 channels) was 58% of a one-core fit; rebuilt, it
+  is 15.6× faster at 695,052 × 8 (869 s → 55.6 s) with the same neighbours (3 rows differ only by
+  exactly tied distances). tercen.com, 2.0.1, one CPU: 814 s against the R operator's 431 s.
+- **`init = spectral` above 2,000 cells was a random start** (every step upgraded from 1.x carries
+  `spectral`). Now the PCA start, as `auto` and as uwot's `spca` fallback; the task log names the
+  start. Measured against uwot (the R operator's call) on public Levine-13/32: see the morning
+  report of 2026-10-16.
+
 ## 0.1.2 (2026-09-22)
 
 - **No more OpenBLAS.** `umaprs` now does its symmetric eigendecompositions in pure Rust

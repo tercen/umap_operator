@@ -19,7 +19,7 @@
       "kind": "EnumeratedProperty",
       "name": "init",
       "defaultValue": "auto",
-      "description": "Starting layout: auto (spectral below 2,000 cells, PCA above), spectral, pca or random. uwot's normlaplacian/laplacian/agspectral are taken as spectral, spca as pca, lvrandom as random.",
+      "description": "Starting layout: auto (spectral below 2,000 cells, PCA above), spectral (the same; above 2,000 cells the PCA start, as uwot's spca), pca or random. The task log says which start was used. uwot's normlaplacian/laplacian/agspectral are taken as spectral, spca as pca, lvrandom as random.",
       "values": [
         "auto",
         "spectral",

@@ -24,6 +24,7 @@ pub mod upload;
 
 use std::sync::Arc;
 use std::time::Instant;
+use umaprs::InitMethod;
 
 use anyhow::{Context, Result, anyhow};
 use ndarray::Array2;
@@ -179,6 +180,18 @@ async fn execute(ctx: &ContextBase, mode: Mode) -> Result<()> {
              on the model, so the remaining cells could not be transformed. Set pca to -1, \
              or fit on every cell."
         );
+    }
+
+    // Say which start the fit uses: `spectral` (the R operator's default, so every upgraded
+    // step) is a dense eigendecomposition only up to 2,000 cells, and above that the PCA start
+    // uwot itself falls back to ("spca").
+    let n_fit = train.as_ref().map_or(n_cells, |idx| idx.len());
+    if matches!(s.init, InitMethod::Spectral | InitMethod::Auto) && n_fit > 2000 {
+        rep.info(format!(
+            "init: {n_fit} cells to fit, so the start is PCA (the first two principal \
+             components, each scaled to sd 1: uwot's 'spca'); a spectral start is computed up \
+             to 2,000 cells"
+        ));
     }
 
     let mut umap = umaprs::UMAP::new()
