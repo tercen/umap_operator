@@ -40,8 +40,10 @@ pub struct Settings {
     /// `sample_factor`: the column factor that names the sample. Empty takes the first column
     /// factor — unless that factor has one value per cell, which is the event id, not a sample.
     pub sample_factor: String,
-    /// `seed`. Always set; a negative value is refused rather than read as "random".
+    /// `seed` used for this run. A negative property (1.x's default) means "random": a seed
+    /// is drawn per run and `seed_random` is set so the log can name it.
     pub seed: u64,
+    pub seed_random: bool,
     /// `n_epochs`: 0 lets the library choose (500 below 10,000 cells, 200 above, as umap-learn).
     pub n_epochs: usize,
     /// `threads`: 0 is every core the container is given. 1 is bit-for-bit reproducible.
@@ -61,24 +63,27 @@ impl Default for Settings {
             train_cells_per_sample: 0,
             sample_factor: String::new(),
             seed: 42,
+            seed_random: false,
             n_epochs: 0,
             threads: 0,
         }
     }
 }
 
-/// The R operator (1.x) defaults `seed` to -1, read as "random", so every step upgraded from 1.x
-/// carries -1. Any fixed seed is one possible random draw, so a negative seed takes the default
-/// rather than failing the step, and the result can still be repeated.
-fn seed_from(v: f64, default: u64) -> u64 {
+/// `seed` as the R operator (1.x) reads it: a negative value, its default, means "random". A
+/// fresh seed is then drawn for this run and returned with `true`, so the caller can tell the
+/// user which seed was used and how to repeat the run.
+fn seed_from(v: f64, draw: impl FnOnce() -> u64) -> (u64, bool) {
     if v < 0.0 {
-        tracing::warn!(
-            "property 'seed' is {v} (the R operator's 'random'); using {default} so the step \
-             can be repeated"
-        );
-        return default;
+        (draw(), true)
+    } else {
+        (v as u64, false)
     }
-    v as u64
+}
+
+/// A seed the property panel can hold exactly and a user can type back in.
+fn random_seed() -> u64 {
+    u64::from(rand::random::<u32>() >> 1)
 }
 
 /// Read the properties off the task's `CubeQueryTask` snapshot.
@@ -138,7 +143,7 @@ pub fn read(ctx: &ContextBase) -> Result<Settings> {
         bail!("property 'prop.train' must be between 0 and 1, got {prop_train}");
     }
     let train_cells_per_sample = num("train_cells_per_sample", 0.0)?.max(0.0) as usize;
-    let seed = seed_from(num("seed", d.seed as f64)?, d.seed);
+    let (seed, seed_random) = seed_from(num("seed", d.seed as f64)?, random_seed);
     let s = Settings {
         init,
         scale,
@@ -150,6 +155,7 @@ pub fn read(ctx: &ContextBase) -> Result<Settings> {
         train_cells_per_sample,
         sample_factor: text("sample_factor"),
         seed,
+        seed_random,
         n_epochs: num("n_epochs", 0.0)?.max(0.0) as usize,
         threads: num("threads", 0.0)?.max(0.0) as usize,
     };
@@ -191,11 +197,13 @@ mod tests {
     }
 
     #[test]
-    fn a_negative_seed_from_1x_takes_the_default() {
-        assert_eq!(seed_from(-1.0, 42), 42);
-        assert_eq!(seed_from(-7.0, 42), 42);
-        assert_eq!(seed_from(0.0, 42), 0);
-        assert_eq!(seed_from(123.0, 42), 123);
+    fn a_negative_seed_means_random_and_says_so() {
+        assert_eq!(seed_from(-1.0, || 7), (7, true));
+        assert_eq!(seed_from(-3.0, || 9), (9, true));
+        assert_eq!(seed_from(0.0, || 7), (0, false));
+        assert_eq!(seed_from(123.0, || 7), (123, false));
+        // Drawn seeds fit a property value exactly, so a user can type one back in.
+        assert!((0..1000).all(|_| random_seed() <= i32::MAX as u64));
     }
 
     #[test]

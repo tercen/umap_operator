@@ -105,6 +105,13 @@ async fn execute(ctx: &ContextBase, mode: Mode) -> Result<()> {
         Mode::Dev { .. } => Reporter::silent(),
     };
     let s = props::read(ctx)?;
+    if s.seed_random {
+        rep.info(format!(
+            "seed is negative, which means random: this run used seed {0}. Set seed = {0} to \
+             repeat it; re-running with a negative seed gives a different embedding.",
+            s.seed
+        ));
+    }
 
     let n_values = input::cell_count(ctx).await?;
     let channels = input::row_labels(ctx).await?;

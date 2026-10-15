@@ -44,8 +44,9 @@ which is why the dependency went, not just the build flag.
 
 ## Deliberate differences from the R operator
 
-- A negative `seed` (R's "random", the 1.x default every upgraded step carries) is read as the
-  default 42 with a warning; 2.0.0 refused it and broke every upgraded step.
+- A negative `seed` means random, as in R (the 1.x default every upgraded step carries): a seed
+  is drawn per run and named in the task log (`seed_random`). 2.0.0 refused it and broke every
+  upgraded step; mapping it silently to 42 was rejected (not transparent).
 - `pca` with a training draw is refused: the projection is not stored on the model, so the
   remaining cells could not be transformed. Fit on every cell, or drop `pca`.
 - `init` offers four values; uwot's variants are mapped (see README).
