@@ -3623,7 +3623,7 @@ checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 
 [[package]]
 name = "umap_operator"
-version = "2.0.1"
+version = "2.0.2"
 dependencies = [
  "anyhow",
  "futures",
@@ -3643,8 +3643,8 @@ dependencies = [
 
 [[package]]
 name = "umaprs"
-version = "0.2.1"
-source = "git+https://github.com/tercen/umaprs?tag=0.2.1#244404494ba843620d9f30c4f02e31b1f61fa0af"
+version = "0.2.2"
+source = "git+https://github.com/tercen/umaprs?tag=0.2.2#04b4a383e2776cb8d6ee955a14b1df66af47ccc6"
 dependencies = [
  "gauss-quad",
  "nalgebra 0.33.3",

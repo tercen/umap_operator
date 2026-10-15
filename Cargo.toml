@@ -1,6 +1,6 @@
 [package]
 name = "umap_operator"
-version = "2.0.1"
+version = "2.0.2"
 edition = "2024"
 description = "UMAP for Tercen (Rust): fit on a training draw, project the rest, one embedding per cell"
 license = "Apache-2.0"
@@ -21,9 +21,9 @@ path = "src/bin/dev.rs"
 anyhow = "1"
 tercen-rs = { git = "https://github.com/tercen/tercen-rs", branch = "main" }
 # Pinned to a umaprs tag: the embedding is the operator's output and must not move under a
-# rebuild. 0.2.1 only changes the PCA start for data with fewer channels than output dimensions
-# (one channel panicked in 0.2.0); every other embedding is unchanged.
-umaprs = { git = "https://github.com/tercen/umaprs", tag = "0.2.1" }
+# rebuild. 0.2.2: exact kd-tree 5-19x faster on one core (same neighbours; ties now by index),
+# and `spectral` above 2,000 cells is the PCA start (it was random: global layout lost).
+umaprs = { git = "https://github.com/tercen/umaprs", tag = "0.2.2" }
 ndarray = "0.15"
 rand = "0.8"
 rand_chacha = "0.3"
