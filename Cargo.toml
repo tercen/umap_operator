@@ -1,6 +1,6 @@
 [package]
 name = "umap_operator"
-version = "2.1.0"
+version = "2.2.0"
 edition = "2024"
 description = "UMAP for Tercen (Rust): fit on a training draw, project the rest, one embedding per cell"
 license = "Apache-2.0"
@@ -21,9 +21,9 @@ path = "src/bin/dev.rs"
 anyhow = "1"
 tercen-rs = { git = "https://github.com/tercen/tercen-rs", branch = "main" }
 # Pinned to a umaprs tag: the embedding is the operator's output and must not move under a
-# rebuild. 0.3.0: uwot's spectral start above 2,000 cells (sparse Lanczos; `auto` too), eigh
-# pairing fix; 0.2.2: exact kd-tree 5-19x faster on one core.
-umaprs = { git = "https://github.com/tercen/umaprs", tag = "0.3.0" }
+# rebuild. 0.4.0: exact kNN for the fit up to 40 channels, sparse spectral start above 200
+# cells; 0.3.0: uwot's spectral start, eigh pairing fix; 0.2.2: kd-tree 5-19x faster on one core.
+umaprs = { git = "https://github.com/tercen/umaprs", tag = "0.4.0" }
 ndarray = "0.15"
 rand = "0.8"
 rand_chacha = "0.3"
