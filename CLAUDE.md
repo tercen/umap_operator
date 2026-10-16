@@ -56,8 +56,9 @@ which is why the dependency went, not just the build flag.
 ## Seed and RNG
 
 Training draw: `ChaCha8Rng::seed_from_u64(seed)`. Layout and SGD: `umaprs` `random_state(seed)`.
-`threads = 1` reproduces bit-for-bit; above 1 the HogWild SGD and the parallel HNSW build make
-the last digits scheduling-dependent.
+`threads = 1` reproduces bit-for-bit; above 1 the HogWild SGD (and, above 40 channels, the parallel
+HNSW build) make the last digits scheduling-dependent. Since 2.2.0 (umaprs 0.4.0) the fit's kNN is
+exact up to 40 channels and the spectral start is sparse Lanczos above 200 cells.
 
 ## Tercen unit test
 

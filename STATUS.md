@@ -2,6 +2,17 @@
 
 
 
+
+## 2.2.0 (2026-10-16): umaprs 0.4.0 — in-depth uwot comparison
+
+- **Exact kNN for the fit up to 40 channels** (was 16): with HNSW the map varied between seeds and
+  from uwot's on 32–39-channel data (Levine-32 seed Procrustes 0.78 vs uwot 0.95; now 0.94).
+- **Sparse spectral start above 200 cells** (was 2,000): 1,800 cells took 23 s, now 1.9 s (uwot 8.3 s).
+- One core: Levine-32 81 s (uwot 78 s, 2.1.0 51 s), Samusik-01 41 s (uwot 44 s), a quarter of
+  uwot's memory. Full comparison: `~/tercen/goals/2026-10-16-umap-ready/INDEPTH.md`.
+- Platform-test golden regenerated (38 channels, 1,000 training cells now use the exact kNN and the
+  sparse start): Studio dev run, exported twice, byte-identical.
+
 ## 2.1.0 (2026-10-16): umaprs 0.3.0 — uwot's spectral start
 
 - `init = auto` and `spectral` now start from the normalised-Laplacian eigenvectors at every size
